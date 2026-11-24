@@ -1,0 +1,3460 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Солонгосын Үндэсний Цахим Музей</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #FDE68A;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #07070A;
+      color: #F4F4F5;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    .font-serif-display {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #07070A; }
+    ::-webkit-scrollbar-thumb { background: #3F3F46; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* Traditional Korean Dancheong Pattern Strip */
+    .dancheong-strip {
+      background-image: repeating-linear-gradient(
+        90deg,
+        #B91C1C 0px, #B91C1C 18px,
+        #0F766E 18px, #0F766E 36px,
+        #D97706 36px, #D97706 54px,
+        #1D4ED8 54px, #1D4ED8 72px
+      );
+    }
+
+    /* Grand Palace Doors 3D Transition */
+    .perspective-stage { perspective: 1800px; }
+    .door-left {
+      transform-origin: left center;
+      transition: transform 1.45s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-style: preserve-3d;
+    }
+    .door-right {
+      transform-origin: right center;
+      transition: transform 1.45s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-style: preserve-3d;
+    }
+    .doors-opened .door-left { transform: rotateY(-108deg); }
+    .doors-opened .door-right { transform: rotateY(108deg); }
+
+    /* Hall Ambient Themes */
+    .bg-entrance {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.2), transparent 62%),
+        linear-gradient(180deg, #120F0C 0%, #07070A 100%);
+    }
+    .bg-nature {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.24), transparent 60%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.14), transparent 50%),
+        linear-gradient(180deg, #061A13 0%, #060B09 100%);
+    }
+    .bg-history {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(217, 119, 6, 0.22), transparent 60%),
+        radial-gradient(circle at 15% 85%, rgba(153, 27, 27, 0.18), transparent 50%),
+        linear-gradient(180deg, #1A1008 0%, #090707 100%);
+    }
+    .bg-culture {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.2), transparent 60%),
+        radial-gradient(circle at 80% 85%, rgba(245, 158, 11, 0.14), transparent 50%),
+        linear-gradient(180deg, #190910 0%, #09070A 100%);
+    }
+    .bg-tech {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.22), transparent 60%),
+        radial-gradient(circle at 85% 85%, rgba(37, 99, 235, 0.16), transparent 50%),
+        linear-gradient(180deg, #05111E 0%, #05080F 100%);
+    }
+    .bg-astronomy {
+      background:
+        radial-gradient(circle at 50% 8%, rgba(99, 102, 241, 0.28), transparent 65%),
+        radial-gradient(circle at 20% 80%, rgba(168, 85, 247, 0.2), transparent 55%),
+        radial-gradient(circle at 85% 30%, rgba(14, 165, 233, 0.16), transparent 50%),
+        linear-gradient(180deg, #030513 0%, #020207 100%);
+    }
+
+    .glass-box {
+      background: rgba(15, 15, 22, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .portal-card {
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.35s ease;
+    }
+    .portal-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 45px -15px rgba(0, 0, 0, 0.75);
+    }
+
+    @keyframes stageFade {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .stage-enter {
+      animation: stageFade 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes pinPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.45); opacity: 0.25; }
+    }
+    .pin-ring {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: pinPulse 2.2s infinite ease-in-out;
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+    .animate-float {
+      animation: floatSlow 4.5s ease-in-out infinite;
+    }
+
+    @keyframes modalPop {
+      0% { opacity: 0; transform: scale(0.93) translateY(14px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-pop {
+      animation: modalPop 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    #cosmos-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Visitor Content Protection (Disabled when Admin is logged in) */
+    body.visitor-protected {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+    body.visitor-protected img,
+    body.visitor-protected svg {
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+    body.visitor-protected input,
+    body.visitor-protected textarea,
+    body.visitor-protected select {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    /* Block Printing / Save-as-PDF for non-admin visitors */
+    @media print {
+      body.visitor-protected {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-entrance visitor-protected antialiased selection:bg-amber-500/30 selection:text-amber-200">
+
+  <canvas id="cosmos-canvas"></canvas>
+
+  <!-- Subtle Dynamic Visitor Watermark Overlay (Hidden for Admin) -->
+  <div id="visitor-watermark" class="hidden fixed inset-0 z-40 pointer-events-none overflow-hidden opacity-[0.055] select-none"></div>
+
+  <!-- Anti-Screenshot / Screen-Capture Security Shield Overlay -->
+  <div id="security-shield" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-black/95 backdrop-blur-2xl text-center">
+    <div class="max-w-lg rounded-3xl glass-box border-2 border-rose-500/60 p-8 shadow-2xl">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-rose-500/20 border border-rose-400/50 flex items-center justify-center text-3xl mb-4">
+        🛡️
+      </div>
+      <div class="text-xs font-bold uppercase tracking-[0.2em] text-rose-400">Оюуны Өмчийн Хамгаалалт</div>
+      <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white mt-2">
+        Дэлгэцийн зураг, бичлэг хийх хориотой!
+      </h3>
+      <p id="security-shield-reason" class="text-zinc-300 text-xs sm:text-sm mt-3 leading-relaxed">
+        Уг цахим музейн бүх үзмэр, зураг болон мэдээлэл оюуны өмчөөр хамгаалагдсан тул админы зөвшөөрөлгүйгээр Screenshot, Screen Record, Screen Share хийх болон хуулбарлахыг хатуу хориглоно.
+      </p>
+      <button onclick="dismissSecurityShield()" class="mt-6 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-300 text-zinc-950 font-bold text-xs sm:text-sm shadow-lg hover:brightness-105 cursor-pointer">
+        Ойлголоо, үзэх горим руу буцах
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- ENTRANCE VIEW (ҮҮДНИЙ ХЭСЭГ + ОЮУНЫ ӨМЧИЙН АНХААРУУЛГА + ХААЛГА)      -->
+  <!-- ===================================================================== -->
+  <section id="view-entrance" class="relative min-h-screen flex items-center justify-center overflow-hidden p-4 sm:p-6">
+    <!-- 3D Palace Doors -->
+    <div id="palace-doors" class="perspective-stage fixed inset-0 z-10 pointer-events-none flex">
+      <div class="door-left w-1/2 h-full bg-gradient-to-br from-[#2C150E] via-[#1C0D08] to-[#0E0704] border-r-2 border-amber-500/40 relative flex items-center justify-end pr-4 sm:pr-8 shadow-2xl">
+        <div class="absolute top-0 inset-x-0 h-2 dancheong-strip opacity-85"></div>
+        <div class="absolute bottom-0 inset-x-0 h-2 dancheong-strip opacity-85"></div>
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-amber-400/50 bg-amber-500/10 flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+          <div class="w-4 h-4 rounded-full bg-amber-400"></div>
+        </div>
+      </div>
+      <div class="door-right w-1/2 h-full bg-gradient-to-bl from-[#2C150E] via-[#1C0D08] to-[#0E0704] border-l-2 border-amber-500/40 relative flex items-center justify-start pl-4 sm:pl-8 shadow-2xl">
+        <div class="absolute top-0 inset-x-0 h-2 dancheong-strip opacity-85"></div>
+        <div class="absolute bottom-0 inset-x-0 h-2 dancheong-strip opacity-85"></div>
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-amber-400/50 bg-amber-500/10 flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+          <div class="w-4 h-4 rounded-full bg-amber-400"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entrance Content & Intellectual Property Warning -->
+    <div id="entrance-overlay" class="relative z-20 max-w-2xl w-full text-center transition-opacity duration-700">
+      <div class="rounded-3xl glass-box border border-amber-400/35 p-6 sm:p-10 shadow-2xl">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/35 text-amber-300 text-xs font-semibold tracking-widest uppercase">
+          <span>🏯</span>
+          <span>Солонгосын Үндэсний Цахим Музей</span>
+        </div>
+
+        <h1 class="font-serif-display text-4xl sm:text-5xl font-bold text-white mt-4 tracking-tight">
+          Тавтай морил
+        </h1>
+        <p class="text-zinc-300 text-xs sm:text-sm mt-2 max-w-lg mx-auto">
+          Байгаль, Түүх, Соёл урлаг, Технологи, Одон орны 5 танхим бүхий тусгай хамгаалалттай цахим үзэсгэлэн.
+        </p>
+
+        <!-- Official Intellectual Property & Anti-Capture Warning Box -->
+        <div class="mt-6 text-left rounded-2xl bg-rose-950/35 border border-rose-500/45 p-5 sm:p-6 shadow-inner">
+          <div class="flex items-center gap-2.5 text-rose-300 font-bold text-sm sm:text-base uppercase tracking-wider">
+            <span class="text-xl">⚠️</span>
+            <span>АНХААРУУЛГА — ОЮУНЫ ӨМЧИЙН ХАМГААЛАЛТ</span>
+          </div>
+          <p class="text-zinc-200 text-xs sm:text-sm mt-3 leading-relaxed">
+            Энэхүү цахим музейд байрлах бүх зураг, үзмэр, эх бичвэр болон мэдээлэл нь <strong>оюуны өмчийн хуулиар хамгаалагдсан</strong> болно.
+          </p>
+          <ul class="mt-3 space-y-1.5 text-xs sm:text-sm text-rose-100/95">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span>Уг сайтыг <strong>админы зөвшөөрөлгүйгээр</strong> бусдад түгээх, олон нийтэд нийтлэх болон цааш дамжуулахыг хатуу хориглоно.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span>Зөвшөөрөлгүйгээр <strong>Screenshot (дэлгэцийн зураг авах), Screen Record (дэлгэц бичих), Screen Share (дэлгэц хуваалцах)</strong> болон хуулбарлах үйлдэл хийхийг хориглоно.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span>Дээрх үйлдлүүдийг зөвхөн эрх бүхий <strong>Админ</strong> хийх эрхтэй.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Enter Door CTA Button -->
+        <div class="mt-7">
+          <button onclick="openEntranceNameModal()" class="w-full sm:w-auto px-10 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-300 text-zinc-950 font-bold text-sm sm:text-base shadow-[0_10px_35px_rgba(245,158,11,0.35)] hover:brightness-105 active:scale-[0.99] transition-all cursor-pointer inline-flex items-center justify-center gap-2.5">
+            <span>🚪</span>
+            <span>Үүдээр орох</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: ҮҮДЭЭР ОРОХ — ЗӨВХӨН ОВОГ НЭР БИЧИХ ЦОНХ                     -->
+  <!-- ===================================================================== -->
+  <div id="entrance-name-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="animate-pop relative w-full max-w-md rounded-3xl glass-box border border-amber-400/40 p-6 sm:p-8 shadow-2xl">
+      <button onclick="closeEntranceNameModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center transition-all cursor-pointer">✕</button>
+
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-2xl mb-3">
+        🚪
+      </div>
+      <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white">Үүдээр орох</h3>
+
+      <form onsubmit="submitVisitorEntry(event)" class="mt-5 space-y-5">
+        <div>
+          <label for="input-visitor-name" class="block text-xs font-semibold text-amber-200 uppercase tracking-wider mb-2">
+            Овог нэр
+          </label>
+          <input id="input-visitor-name" type="text" required autocomplete="off" class="w-full px-4 py-3.5 rounded-xl bg-black/70 border border-white/20 focus:border-amber-400 focus:outline-none text-white text-sm sm:text-base" />
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-300 text-zinc-950 font-bold text-sm sm:text-base shadow-lg hover:brightness-105 transition-all cursor-pointer">
+          Үүдээр орох
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TOP NAVIGATION BAR (ДОТОГШ ОРСНЫ ДАРАА ХАРАГДАНА)                     -->
+  <!-- ===================================================================== -->
+  <header id="museum-header" class="hidden sticky top-0 z-30 border-b border-white/10 bg-zinc-950/85 backdrop-blur-xl">
+    <div class="h-1 w-full dancheong-strip opacity-90"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand / Return to Level 0 Main Hall -->
+      <button onclick="navigateTo({ level: 'atrium' })" class="flex items-center gap-2.5 text-left group cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/25 to-red-600/20 border border-amber-400/45 flex items-center justify-center text-xl shadow-lg group-hover:scale-105 transition-transform">
+          🏯
+        </div>
+        <div>
+          <div class="font-serif-display text-lg sm:text-xl font-bold text-amber-200 tracking-wide leading-none">
+            СОЛОНГОСЫН ЦАХИМ МУЗЕЙ
+          </div>
+          <div class="text-[11px] text-zinc-400 mt-1">Шаталсан виртуал үзэсгэлэн</div>
+        </div>
+      </button>
+
+      <!-- Quick Hall Shortcuts -->
+      <nav class="hidden xl:flex items-center gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/10">
+        <button onclick="navigateTo({ level: 'atrium' })" data-nav="atrium" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-white transition-all cursor-pointer">
+          🏛️ Гол танхим
+        </button>
+        <button onclick="enterChamber('nature')" data-nav="nature" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-emerald-300 transition-all cursor-pointer">
+          🌿 Байгаль
+        </button>
+        <button onclick="enterChamber('history')" data-nav="history" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-amber-300 transition-all cursor-pointer">
+          📜 Түүх
+        </button>
+        <button onclick="enterChamber('culture')" data-nav="culture" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-rose-300 transition-all cursor-pointer">
+          🎎 Соёл урлаг
+        </button>
+        <button onclick="enterChamber('tech')" data-nav="tech" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-cyan-300 transition-all cursor-pointer">
+          🤖 Технологи
+        </button>
+        <button onclick="enterChamber('astronomy')" data-nav="astronomy" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-300 hover:text-indigo-300 transition-all cursor-pointer">
+          🌌 Одон орон
+        </button>
+      </nav>
+
+      <!-- Upload & Ticket Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="btn-admin-login" onclick="openAdminLoginModal()" class="px-3.5 py-2 rounded-xl bg-white/[0.06] hover:bg-amber-500/20 border border-white/15 hover:border-amber-400/40 text-zinc-300 hover:text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer">
+          <span>🔐</span>
+          <span>Админ</span>
+        </button>
+
+        <button onclick="openTicketInfoModal()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer">
+          <span>🎟️</span>
+          <span id="header-visitor-name" class="max-w-[100px] truncate">Зочин</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin Control Bar (Зөвхөн Админ нэвтэрсэн үед харагдана) -->
+    <div id="admin-control-bar" class="hidden bg-gradient-to-r from-emerald-950/90 via-zinc-900/95 to-amber-950/85 border-t border-emerald-400/35 px-4 sm:px-6 py-2.5">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5">
+        <div class="flex items-center gap-2 text-xs">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-bold">
+            ● АДМИН ГОРИМ ИДЭВХТЭЙ
+          </span>
+          <span class="text-zinc-300 hidden sm:inline">Үзмэр нэмэх, засах, хасах эрх нээлттэй байна.</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="openExhibitEditorModal(null)" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-zinc-950 text-xs font-bold flex items-center gap-1.5 shadow hover:brightness-105 transition-all cursor-pointer">
+            <span class="text-sm font-extrabold">+</span>
+            <span>Шинэ үзмэр нэмэх</span>
+          </button>
+          <button onclick="confirmResetDefaultData()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-zinc-200 text-xs font-semibold transition-all cursor-pointer">
+            ↺ Анхны өгөгдөл
+          </button>
+          <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/35 border border-rose-400/40 text-rose-200 text-xs font-semibold transition-all cursor-pointer">
+            Гарах
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breadcrumb Trail Bar (Гол танхим > Түүхийн танхим > Эртний улсын хатад) -->
+    <div class="bg-black/45 border-t border-white/5 px-4 sm:px-6 py-2">
+      <div id="breadcrumb-bar" class="max-w-7xl mx-auto flex flex-wrap items-center gap-1.5 text-xs text-zinc-400">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN MUSEUM WORKSPACE (ШАТЛАН НЭВТРЭХ ҮЗЭСГЭЛЭНГИЙН ТАЛБАЙ)            -->
+  <!-- ===================================================================== -->
+  <main id="museum-workspace" class="hidden relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 pb-24">
+    <div id="workspace-stage" class="stage-enter">
+      <!-- Dynamic Level View Rendered Here -->
+    </div>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: ҮЗМЭР ТОМРУУЛАХ БА ДЭЛГЭРЭНГҮЙ МЭДЭЭЛЭЛ (ZOOM MODAL)         -->
+  <!-- ===================================================================== -->
+  <div id="detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl">
+    <div class="animate-pop relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl glass-box border border-amber-400/35 shadow-2xl">
+      <button onclick="closeDetailModal()" class="sticky top-4 float-right mr-4 mt-4 z-30 w-10 h-10 rounded-full bg-black/75 hover:bg-rose-500 border border-white/20 text-white flex items-center justify-center text-lg transition-all cursor-pointer">
+        ✕
+      </button>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-0 clear-both -mt-10">
+        <!-- Left: Multi-Image + Zoom Canvas -->
+        <div class="lg:col-span-7 bg-black/75 p-4 sm:p-6 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/10">
+          <div id="zoom-viewport" class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-zinc-950 border border-white/15 cursor-grab active:cursor-grabbing flex items-center justify-center">
+            <img id="detail-main-img" src="" alt="Үзмэр" draggable="false" class="w-full h-full object-contain transition-transform duration-150 select-none" style="transform: scale(1) translate(0px, 0px);" />
+            <div class="absolute bottom-3 left-3 px-3 py-1 rounded-full bg-black/75 border border-white/15 text-[11px] text-amber-300 pointer-events-none">
+              🔍 <span id="zoom-percent-badge">100%</span> • Томруулаад хулганаар чирнэ үү
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 mt-4">
+            <div id="detail-thumbs" class="flex items-center gap-2"></div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="adjustZoom(-0.35)" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white cursor-pointer">− Жижигрүүлэх</button>
+              <button onclick="resetZoom()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-zinc-300 cursor-pointer">100%</button>
+              <button onclick="adjustZoom(0.35)" class="px-3 py-1.5 rounded-xl bg-amber-400 text-zinc-950 text-xs font-bold cursor-pointer">+ Томруулах</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Detailed Information -->
+        <div class="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span id="detail-hall-tag" class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-semibold border border-amber-400/30">Танхим</span>
+              <span id="detail-sub-tag" class="text-zinc-400 font-medium">Дэд ангилал</span>
+            </div>
+
+            <h3 id="detail-title" class="font-serif-display text-2xl sm:text-3xl font-bold text-white mt-3 leading-tight">
+              Үзмэрийн нэр
+            </h3>
+            <div id="detail-subtitle" class="text-xs font-semibold text-amber-300 mt-1"></div>
+
+            <div id="detail-meta-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-4"></div>
+
+            <p id="detail-desc" class="text-zinc-200 text-sm leading-relaxed mt-4 whitespace-pre-line"></p>
+
+            <div class="mt-5 p-4 rounded-2xl bg-amber-500/10 border border-amber-400/30">
+              <div id="detail-extra-title" class="text-xs font-bold text-amber-300 uppercase tracking-wider">💡 Нэмэлт тайлбар</div>
+              <p id="detail-extra-text" class="text-xs text-zinc-200 mt-1 leading-relaxed"></p>
+            </div>
+
+            <div id="detail-audio-box" class="hidden mt-4">
+              <button onclick="playInstrumentDemo()" class="w-full py-2.5 px-4 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 text-rose-200 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer">
+                <span>🔊</span>
+                <span>Хөгжмийн эгшиг сонсох (Жишээ аялгуу)</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-white/10">
+            <button onclick="closeDetailModal()" class="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+              Хаах
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 4: АДМИН ҮЗМЭР НЭМЭХ БА ЗАСАХ ЦОНХ (1-3 ЗУРАГ ОРУУЛАХ)          -->
+  <!-- ===================================================================== -->
+  <div id="upload-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="animate-pop relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl glass-box border border-emerald-400/40 p-6 sm:p-8 shadow-2xl">
+      <button onclick="closeUploadModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center transition-all cursor-pointer">✕</button>
+
+      <div class="text-xs font-semibold uppercase tracking-widest text-emerald-400">🔐 Админ Удирдлага • Сан Хөмрөг</div>
+      <h3 id="up-modal-heading" class="font-serif-display text-2xl sm:text-3xl font-bold text-white mt-1">Шинэ үзмэр ба 1–3 зураг оруулах</h3>
+      <p id="up-modal-subtext" class="text-zinc-400 text-xs sm:text-sm mt-1">
+        Өөрийн төхөөрөмжөөс 1-ээс 3 хүртэлх зураг сонгон дурын танхимын дэд хэсэгт шинэ үзмэр болгон нэмээрэй.
+      </p>
+
+      <form onsubmit="submitExhibitForm(event)" class="mt-5 space-y-4">
+        <div id="up-location-selectors" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Танхим сонгох *</label>
+            <select id="up-hall" onchange="updateUploadSubmenus()" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none">
+              <option value="nature">🌿 1. Байгалийн танхим</option>
+              <option value="history">📜 2. Түүхийн танхим</option>
+              <option value="culture">🎎 3. Соёл урлагийн танхим</option>
+              <option value="tech">🤖 4. Технологийн танхим</option>
+              <option value="astronomy">🌌 5. Одон орны танхим</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Дэд өрөө / Цэс сонгох *</label>
+            <select id="up-submenu" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none">
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Үзмэрийн нэр *</label>
+            <input id="up-title" type="text" required placeholder="Жишээ: Халласан уулын оргил" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Он цаг / Ангилал *</label>
+            <input id="up-tag" type="text" required placeholder="Жишээ: XV зуун / Ховор олдвор" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none" />
+          </div>
+        </div>
+
+        <!-- Structured Metadata Quick Editors -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div>
+            <label id="up-m0-label" class="block text-[11px] font-semibold text-zinc-400 mb-1">Үзүүлэлт 1</label>
+            <input id="up-m0-val" type="text" placeholder="Жишээ: Чэжү арал" class="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/10 text-white text-xs focus:border-emerald-400 focus:outline-none" />
+          </div>
+          <div>
+            <label id="up-m1-label" class="block text-[11px] font-semibold text-zinc-400 mb-1">Үзүүлэлт 2</label>
+            <input id="up-m1-val" type="text" placeholder="Жишээ: ЮНЕСКО өв" class="w-full px-3 py-2 rounded-lg bg-zinc-900 border border-white/10 text-white text-xs focus:border-emerald-400 focus:outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Зураг оруулах / Солих (1–3 зураг) *</label>
+          <div class="p-4 rounded-2xl border-2 border-dashed border-emerald-400/40 bg-emerald-500/5 text-center">
+            <input id="up-files" type="file" accept="image/*" multiple onchange="handleFilePreview(event)" class="hidden" />
+            <label for="up-files" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 text-xs font-semibold cursor-pointer">
+              <span>📷</span>
+              <span>Компьютер / Утаснаас зураг сонгох (Дээд тал нь 3)</span>
+            </label>
+            <div id="up-preview-box" class="grid grid-cols-3 gap-3 mt-3 empty:hidden"></div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Дэлгэрэнгүй тайлбар *</label>
+          <textarea id="up-desc" rows="3" required placeholder="Үзмэрийн түүх, онцлог, тайлбарыг бичнэ үү..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Нэмэлт тэмдэглэл (Гарал үүсэл / Баримт)</label>
+          <input id="up-extra" type="text" placeholder="Жишээ: Сөүл хотоос олдсон." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-white/15 text-white text-sm focus:border-emerald-400 focus:outline-none" />
+        </div>
+
+        <button id="up-submit-btn" type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-zinc-950 font-bold text-sm shadow-lg hover:brightness-105 cursor-pointer">
+          ✓ Музейн танхимд хадгалах
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 5: АДМИН НЭВТРЭХ ЦОНХ                                           -->
+  <!-- ===================================================================== -->
+  <div id="admin-login-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="animate-pop relative w-full max-w-md rounded-3xl glass-box border border-emerald-400/40 p-6 sm:p-8 shadow-2xl">
+      <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center transition-all cursor-pointer">✕</button>
+
+      <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-2xl mb-3">
+        🔐
+      </div>
+      <h3 class="font-serif-display text-2xl font-bold text-white">Админ Нэвтрэх</h3>
+      <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+        Үзмэр нэмэх, засварлах, устгах эрх зөвхөн музейн админд нээлттэй.
+      </p>
+
+      <form onsubmit="submitAdminLogin(event)" class="mt-5 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1.5">
+            Админ нууц үг
+          </label>
+          <input id="admin-pass-input" type="password" required placeholder="Нууц үгээ оруулна уу..." class="w-full px-4 py-3 rounded-xl bg-black/65 border border-white/15 focus:border-emerald-400 focus:outline-none text-white text-sm" />
+          <div id="admin-login-error" class="hidden text-xs text-rose-400 mt-1.5 font-medium">
+            ⚠️ Нууц үг буруу байна. Дахин оролдоно уу.
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-zinc-950 font-bold text-sm shadow-lg hover:brightness-105 transition-all cursor-pointer">
+          Нэвтрэх
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 6: УСТГАХ / СЭРГЭЭХ БАТАЛГААЖУУЛАХ ЦОНХ (CUSTOM CONFIRM)        -->
+  <!-- ===================================================================== -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+    <div class="animate-pop relative w-full max-w-md rounded-3xl glass-box border border-rose-400/40 p-6 shadow-2xl">
+      <h3 id="confirm-title" class="font-serif-display text-2xl font-bold text-white">Баталгаажуулах</h3>
+      <p id="confirm-message" class="text-zinc-300 text-sm mt-2 leading-relaxed"></p>
+      <div class="mt-6 flex items-center justify-end gap-2.5">
+        <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-zinc-200 text-xs font-semibold cursor-pointer">
+          Цуцлах
+        </button>
+        <button id="confirm-ok-btn" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow cursor-pointer">
+          Тийм, устгах
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300">
+    <div class="px-5 py-2.5 rounded-full glass-box border border-amber-400/50 text-amber-200 text-xs sm:text-sm font-medium shadow-2xl">
+      <span id="toast-msg">Мэдэгдэл</span>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. BESPOKE SVG ARTWORK GENERATORS (NO BROKEN EXTERNAL IMAGES EVER)
+    // =========================================================================
+    function createVisual(bg1, bg2, accent, icon, title, sub, badgeText) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${bg1}"/>
+              <stop offset="100%" stop-color="${bg2}"/>
+            </linearGradient>
+            <radialGradient id="glow" cx="50%" cy="42%" r="54%">
+              <stop offset="0%" stop-color="${accent}" stop-opacity="0.38"/>
+              <stop offset="100%" stop-color="${accent}" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="800" height="560" fill="url(#bg)"/>
+          <circle cx="400" cy="235" r="245" fill="url(#glow)"/>
+          <rect x="26" y="26" width="748" height="508" rx="22" fill="none" stroke="${accent}" stroke-opacity="0.35" stroke-width="2"/>
+          <circle cx="400" cy="225" r="108" fill="rgba(0,0,0,0.38)" stroke="${accent}" stroke-opacity="0.55" stroke-width="2.5"/>
+          <text x="400" y="255" font-size="102" text-anchor="middle" fill="#ffffff">${icon}</text>
+          <rect x="52" y="52" width="215" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="${accent}" stroke-opacity="0.45"/>
+          <text x="159" y="73" font-family="sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="${accent}">${badgeText}</text>
+          <text x="400" y="405" font-family="Georgia, serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#FFFFFF">${title}</text>
+          <text x="400" y="445" font-family="sans-serif" font-size="17" text-anchor="middle" fill="#D4D4D8">${sub}</text>
+        </svg>
+      `.trim();
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    function pairViews(bg1, bg2, accent, icon, title, sub) {
+      return [
+        createVisual(bg1, bg2, accent, icon, title, sub, '1. Бүтэн харагдац'),
+        createVisual(bg2, '#050508', accent, icon, title, 'Ойртуулсан нарийн бүтэц', '2. Ойртуулсан зураг')
+      ];
+    }
+
+    function makePlanetImages(planetName, c1, c2, c3, hasRing, subLabel) {
+      const fullSvg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560">
+          <defs>
+            <radialGradient id="pGrad" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="${c1}"/>
+              <stop offset="55%" stop-color="${c2}"/>
+              <stop offset="100%" stop-color="#04050C"/>
+            </radialGradient>
+            <radialGradient id="halo" cx="50%" cy="46%" r="48%">
+              <stop offset="0%" stop-color="${c1}" stop-opacity="0.32"/>
+              <stop offset="100%" stop-color="#020308" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="800" height="560" fill="#030510"/>
+          <circle cx="120" cy="90" r="2" fill="#FFF"/><circle cx="680" cy="110" r="2.5" fill="#C7D2FE"/>
+          <circle cx="210" cy="440" r="1.8" fill="#FFF"/><circle cx="640" cy="420" r="2" fill="#FFF"/>
+          <circle cx="400" cy="245" r="230" fill="url(#halo)"/>
+          <circle cx="400" cy="245" r="128" fill="url(#pGrad)"/>
+          ${hasRing ? `<ellipse cx="400" cy="245" rx="225" ry="44" transform="rotate(-14 400 245)" fill="none" stroke="${c3}" stroke-width="14" stroke-opacity="0.65"/>` : ''}
+          <rect x="48" y="48" width="185" height="32" rx="16" fill="rgba(255,255,255,0.08)" stroke="${c1}"/>
+          <text x="140" y="69" font-family="sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="${c1}">1. Бүтэн зураг</text>
+          <text x="400" y="445" font-family="Georgia, serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#FFFFFF">${planetName}</text>
+          <text x="400" y="480" font-family="sans-serif" font-size="16" text-anchor="middle" fill="#A5B4FC">${subLabel}</text>
+        </svg>
+      `.trim();
+
+      const closeupSvg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560">
+          <defs>
+            <radialGradient id="surf" cx="25%" cy="25%" r="85%">
+              <stop offset="0%" stop-color="${c1}"/>
+              <stop offset="50%" stop-color="${c2}"/>
+              <stop offset="100%" stop-color="${c3}"/>
+            </radialGradient>
+          </defs>
+          <rect width="800" height="560" fill="#030510"/>
+          <circle cx="400" cy="520" r="460" fill="url(#surf)"/>
+          <ellipse cx="320" cy="260" rx="140" ry="38" fill="rgba(0,0,0,0.22)"/>
+          <ellipse cx="520" cy="340" rx="170" ry="45" fill="rgba(255,255,255,0.12)"/>
+          <circle cx="240" cy="350" r="36" fill="rgba(0,0,0,0.25)"/>
+          <circle cx="560" cy="230" r="24" fill="rgba(0,0,0,0.2)"/>
+          <rect x="48" y="48" width="225" height="32" rx="16" fill="rgba(0,0,0,0.65)" stroke="${c1}"/>
+          <text x="160" y="69" font-family="sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="${c1}">2. Ойртуулсан гадаргуу</text>
+          <text x="400" y="475" font-family="Georgia, serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#FFFFFF">${planetName} — Гадаргуу ба Агаар мандал</text>
+        </svg>
+      `.trim();
+
+      return [
+        'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(fullSvg),
+        'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(closeupSvg)
+      ];
+    }
+
+    // =========================================================================
+    // 2. COMPLETE MUSEUM DATABASE
+    // =========================================================================
+    const MUSEUM_DATA = {
+      // -----------------------------------------------------------------------
+      // 1. БАЙГАЛИЙН ТАНХИМ
+      // -----------------------------------------------------------------------
+      nature: {
+        id: 'nature',
+        number: '1',
+        icon: '🌿',
+        name: 'Байгалийн танхим',
+        bgClass: 'bg-nature',
+        accent: '#10B981',
+        borderClass: 'border-emerald-500/35 hover:border-emerald-400',
+        shortDesc: 'Байгалийн үзэсгэлэнт 5 цогцолбор газар, МЭӨ түүхэн 5 олдвор, ховор эмийн 5 ургамал.',
+        description: 'Солонгосын хойгийн гайхамшигт байгалийн тогтоц, эртний чулуун хөшөө дурсгал болон анагаах увдистай ховор ургамлын 3 тусдаа өрөө.',
+        submenus: [
+          {
+            id: 'nat-parks',
+            number: '1',
+            icon: '🗺️',
+            label: '1. Байгалийн үзэсгэлэнт 5 цогцолбор газар',
+            portalDesc: 'Солонгосын интерактив том газрын зураг дээрх 5 цогцолбор газар дээр дарж орчны дүрслэл, мэдээллийг үзнэ үү.',
+            countText: 'Интерактив газрын зураг • 5 газар',
+            type: 'map',
+            items: [
+              {
+                id: 'np-1', mapX: 255, mapY: 505,
+                title: '1. Халласан Уул ба Чэжү Арал',
+                subtitle: 'Чэжү тусгай муж • 1,947 м өндөр',
+                meta: [
+                  { label: 'Байршил', value: 'Чэжү арал (Өмнөд тэнгис)' },
+                  { label: 'Статус', value: 'ЮНЕСКО-гийн Дэлхийн өв' },
+                  { label: 'Орчны уур амьсгал', value: 'Галт уулын тогоо, манан, зэрлэг буга' },
+                  { label: 'Шилдэг улирал', value: '4 улирал (Хавар, Өвөл онцгой)' }
+                ],
+                description: 'Өмнөд Солонгосын хамгийн өндөр оргил Халласан галт уул болон орой дээрх Пэннокдам нуур. Ой мод, цагаан буга, хар лааван хад хосолсон байгалийн диваажин.',
+                extraTitle: '🍃 Орчны дүрслэл',
+                extraText: 'Өглөөний сэрүүн манан дунд үүлс хөл доор нүүж, 1,800 гаруй төрлийн ургамал, мөнх ногоон ой хүрээлнэ.',
+                images: pairViews('#064E3B', '#022C22', '#34D399', '🌋', 'Халласан Уул ба Чэжү Арал', 'ЮНЕСКО-гийн Дэлхийн Байгалийн Өв')
+              },
+              {
+                id: 'np-2', mapX: 395, mapY: 125,
+                title: '2. Сораксан Үндэсний Хүрээлэн',
+                subtitle: 'Канвон муж • Цаст оргилын уул',
+                meta: [
+                  { label: 'Байршил', value: 'Сокчо, Канвон муж' },
+                  { label: 'Оргил', value: 'Тэчонбон (1,708 м)' },
+                  { label: 'Орчны уур амьсгал', value: 'Цагаан боржин хад, улаан агч ой' },
+                  { label: 'Амьтан ургамал', value: 'Солонгос уулын ямаа, заарт буга' }
+                ],
+                description: 'Цагаан боржин чулуун хясаа, болор мэт тунгалаг горхи, намрын гал улаан агч модны навчаараа алдартай Солонгосын хамгийн үзэсгэлэнт уулын цогцолбор.',
+                extraTitle: '🍃 Орчны дүрслэл',
+                extraText: 'Хүрхрээний чимээ, нарсны давирхайн үнэр сэнхийж, хадан цохио дээгүүр үүлс хөвнө.',
+                images: pairViews('#7C2D12', '#064E3B', '#FB923C', '⛰️', 'Сораксан Үндэсний Хүрээлэн', 'Канвон мужийн сувд')
+              },
+              {
+                id: 'np-3', mapX: 280, mapY: 410,
+                title: '3. Сүнчонман Булангийн Эко Намаг',
+                subtitle: 'Өмнөд Жолла муж • Алтан зэгст тал',
+                meta: [
+                  { label: 'Байршил', value: 'Сүнчон хот' },
+                  { label: 'Талбай', value: '5.4 км² зэгст талбай' },
+                  { label: 'Орчны уур амьсгал', value: 'Алтан зэгс, нүүдлийн шувууд' },
+                  { label: 'Олон улсын зэрэглэл', value: 'Рамсарын конвенцын өв' }
+                ],
+                description: 'Тэнгэрийн хаяа хүртэл үргэлжлэх өтгөн зэгст талбай, тахиралдан урсах суваг болон ховор нүүдлийн шувууд өвөлжихөөр ирдэг далайн эргийн эко цогцолбор.',
+                extraTitle: '🍃 Орчны дүрслэл',
+                extraText: 'Нар жаргах үед зэгсний толгой алтлаг өнгөөр гялалзаж, халбаган хошуут шувууд дээгүүр нисэлдэнэ.',
+                images: pairViews('#365314', '#09090B', '#A3E635', '🌾', 'Сүнчонман Булангийн Намаг', 'Алтан зэгст диваажин')
+              },
+              {
+                id: 'np-4', mapX: 215, mapY: 430,
+                title: '4. Жиндо Далайн Хуваагдал (Мосегийн Гайхамшиг)',
+                subtitle: 'Жиндо арал • Далайн ёроолын зам',
+                meta: [
+                  { label: 'Байршил', value: 'Жиндо арал, Өмнөд Жолла' },
+                  { label: 'Урт ба Өргөн', value: '2.8 км урт, 40 м өргөн' },
+                  { label: 'Орчны уур амьсгал', value: 'Далайн түрлэг татарч хуурай зам нээгдэх' },
+                  { label: 'Үзэгдэл', value: 'Жилд 2-3 удаа тохионо' }
+                ],
+                description: 'Далайн түрлэг хүчтэй татрах үед хоёр арлын хооронд 2.8 километр урт хуурай газар ил гарч, далай хоёр хуваагдах мэт гайхамшигт байгалийн үзэгдэл.',
+                extraTitle: '🍃 Орчны дүрслэл',
+                extraText: 'Хоёр талд далайн давалгаа цалгиж, дундуур нь далайн хясаа, загас бүхий элсэн зурвас зам нээгдэнэ.',
+                images: pairViews('#0C4A6E', '#09090B', '#38BDF8', '🌊', 'Жиндо Далайн Хуваагдал', 'Байгалийн ховор үзэгдэл')
+              },
+              {
+                id: 'np-5', mapX: 380, mapY: 345,
+                title: '5. Упо Намгархаг Дархан Цаазат Газар',
+                subtitle: 'Чаннён, Өмнөд Кёнсан • 140 сая жилийн түүхтэй',
+                meta: [
+                  { label: 'Байршил', value: 'Чаннён хот' },
+                  { label: 'Насжилт', value: '140 сая жил (Үлэг гүрвэлийн үе)' },
+                  { label: 'Орчны уур амьсгал', value: 'Манан бүрхсэн эртний нуур, усны сараана' },
+                  { label: 'Биологийн төрөл', value: '1,500 гаруй зүйл амьтан ургамал' }
+                ],
+                description: 'Солонгосын хамгийн том, хамгийн эртний байгалийн намаг. 140 сая жилийн өмнө үлэг гүрвэлүүд амьдарч байсан үеэс өнөөг хүртэл хэвээр хадгалагдсан амьд музей.',
+                extraTitle: '🍃 Орчны дүрслэл',
+                extraText: 'Өглөөний манан дунд уд мод усан дээр тонгойж, эртний үлгэрийн ертөнц мэт нам гүм орчин ноёлно.',
+                images: pairViews('#14532D', '#052E16', '#4ADE80', '🪷', 'Упо Намгархаг Газар', '140 сая жилийн амьд байгаль')
+              }
+            ]
+          },
+          {
+            id: 'nat-artifacts',
+            number: '2',
+            icon: '🗿',
+            label: '2. МЭӨ түүхэн 5 олдвор (чулуу, хөшөө)',
+            portalDesc: 'Эртний чулуун бунхан, хадны сүг зураг, чулуун зэвсэг, гэрэлт хөшөөнүүдийн хэзээ олдсон түүхийг үзнэ үү.',
+            countText: '5 түүхэн олдвор',
+            type: 'grid',
+            items: [
+              {
+                id: 'na-1',
+                title: '1. Гочан Дольмен Чулуун Бунхан',
+                subtitle: 'МЭӨ I мянган жил (Хүрлийн үе)',
+                meta: [
+                  { label: 'Олдсон / Бүртгэсэн он', value: 'МЭӨ 700 оны орчим (2000 онд ЮНЕСКО)' },
+                  { label: 'Байршил', value: 'Гочан, Умард Жолла муж' },
+                  { label: 'Жин', value: 'Дээд хавтан нь 300 тонн хүртэл' },
+                  { label: 'Төрөл', value: 'Мегалит чулуун хөшөө бунхан' }
+                ],
+                description: 'Хүрлийн үеийн овог аймгийн удирдагчдын булшин дээр босгосон аварга чулуун хөшөө. Дэлхийн нийт дольмен хөшөөний 40 гаруй хувь нь Солонгост байдаг.',
+                extraTitle: '🪨 Археологийн баримт',
+                extraText: 'Хэдэн зуун тонн жинтэй хавтан чулууг ямар ч орчин үеийн техникгүйгээр уулнаас зөөж босгосон нь эртний инженерчлэлийн гайхамшиг юм.',
+                images: pairViews('#3F3F46', '#18181B', '#FBBF24', '🗿', 'Гочан Дольмен Чулуун Хөшөө', 'МЭӨ VII зуун')
+              },
+              {
+                id: 'na-2',
+                title: '2. Бангудэ Хадны Сүг Зураг',
+                subtitle: 'МЭӨ 5000 – МЭӨ 1000 он',
+                meta: [
+                  { label: 'Олдсон он', value: '1971 оны 12-р сарын 25' },
+                  { label: 'Байршил', value: 'Ульсан хот, Тэхва голын эрэг' },
+                  { label: 'Дүрслэл', value: 'Халим, бар, буга, анчид (300 гаруй дүрс)' },
+                  { label: 'Онцлог', value: 'Дэлхийн хамгийн эртний халим агнуурын зураг' }
+                ],
+                description: 'Эгц хадан цохион дээр халим, далайн яст мэлхий, бар, буга болон завиар халим агнаж буй хүмүүсийг сийлсэн шинэ чулуун зэвсгийн үеийн сүг зураг.',
+                extraTitle: '🪨 Олдсон түүх',
+                extraText: '1971 онд Донгүк их сургуулийн судалгааны баг голын эргийн хаднаас санамсаргүй илрүүлсэн.',
+                images: pairViews('#422006', '#09090B', '#F59E0B', '🐋', 'Бангудэ Хадны Сүг Зураг', '1971 онд олдсон')
+              },
+              {
+                id: 'na-3',
+                title: '3. Чонгокни Чулуун Сүх (Ашелийн Зэвсэг)',
+                subtitle: 'МЭӨ 300,000 он (Хуучин чулуун зэвсгийн үе)',
+                meta: [
+                  { label: 'Олдсон он', value: '1978 он' },
+                  { label: 'Байршил', value: 'Ёнчон, Кёнги муж' },
+                  { label: 'Материал', value: 'Кварцит чулуу' },
+                  { label: 'Ач холбогдол', value: 'Зүүн Азийн эртний түүхийг өөрчилсөн' }
+                ],
+                description: 'Хоёр талыг нь тэгш хэмтэй засаж ирлэсэн хуучин чулуун зэвсгийн үеийн гар сүх. Энэ олдвор олдсоноор Зүүн Азид өндөр хөгжилтэй чулуун зэвсгийн соёл байсныг баталсан.',
+                extraTitle: '🪨 Олдсон түүх',
+                extraText: '1978 онд археологийн боловсролтой америк цэрэг Грэг Боуэн Хантан голын эргээс анх олж нээжээ.',
+                images: pairViews('#27272A', '#09090B', '#34D399', '🪨', 'Чонгокни Чулуун Сүх', 'МЭӨ 300,000 он')
+              },
+              {
+                id: 'na-4',
+                title: '4. Чүнжү Когурёгийн Чулуун Хөшөө',
+                subtitle: 'МЭ V зууны эхэн үе (МЭӨ уламжлалт бичээс)',
+                meta: [
+                  { label: 'Олдсон он', value: '1979 он' },
+                  { label: 'Байршил', value: 'Чүнжү, Умард Чүнчон муж' },
+                  { label: 'Өндөр', value: '2.03 метр' },
+                  { label: 'Онцлог', value: 'Өмнөд Солонгост үлдсэн цорын ганц Когурё хөшөө' }
+                ],
+                description: 'Когурё улс өмнө зүгт нутгаа тэлж, Шилла улстай найрамдал тогтоосныг тэмдэглэн босгосон эртний чулуун гэрэлт хөшөө.',
+                extraTitle: '🪨 Олдсон түүх',
+                extraText: 'Олон зууны турш тосгоны хүмүүс жирийн замын чулуу гэж боддог байсан ч 1979 онд эрдэмтэд эртний бичээсийг нь тайлж уншсан.',
+                images: pairViews('#3F2E1E', '#09090B', '#FBBF24', '📜', 'Когурё Чулуун Хөшөө', '1979 онд тайлсан')
+              },
+              {
+                id: 'na-5',
+                title: '5. Жэжү Долхарубан Чулуун Баримал',
+                subtitle: 'Эртний Тамна улсын уламжлал',
+                meta: [
+                  { label: 'Материал', value: 'Галт уулын сүвэрхэг базальт чулуу' },
+                  { label: 'Утга', value: 'Чулуун өвөө (Хамгаалагч сахиус)' },
+                  { label: 'Байршил', value: 'Чэжү арлын хотын хаалганууд' },
+                  { label: 'Үүрэг', value: 'Муу ёрыг хөөж, амар амгаланг сахих' }
+                ],
+                description: 'Бүлтгэр нүд, өргөн хамар, гэдсэн дээрээ гараа тавьсан төрхтэй галт уулын хар чулуун баримал. Чэжү арлын бэлгэ тэмдэг.',
+                extraTitle: '🪨 Соёлын баримт',
+                extraText: 'Баруун гар нь дээрээ байвал эрдэм номын түшмэл, зүүн гар нь дээрээ байвал цэргийн жанжныг бэлгэддэг.',
+                images: pairViews('#1E293B', '#09090B', '#38BDF8', '🗿', 'Долхарубан Чулуун Өвөө', 'Чэжү арлын сахиус')
+              }
+            ]
+          },
+          {
+            id: 'nat-plants',
+            number: '3',
+            icon: '🌱',
+            label: '3. Ховор, эмийн 5 ургамал',
+            portalDesc: 'Хэзээ нээсэн, ямар нөхцөлд ургадаг болон хортой / хоргүй эсэхийг тодорхой харуулсан 5 ховор ургамал.',
+            countText: '5 ховор эмийн ургамал',
+            type: 'grid',
+            items: [
+              {
+                id: 'np-plant-1',
+                poisonStatus: 'safe',
+                title: '1. Солонгос Зэрлэг Хүн Орхоодой (Сансам)',
+                subtitle: '✅ Хоргүй • Дээд зэргийн эмийн ургамал',
+                meta: [
+                  { label: 'Хортой эсэх', value: '✅ Хоргүй (Алтан эмийн ургамал)' },
+                  { label: 'Анх тэмдэглэсэн', value: 'МЭӨ I зууны анагаахын судар' },
+                  { label: 'Ургах нөхцөл', value: 'Далайн түвшнээс 800м+ сэрүүн ой' },
+                  { label: 'Насжилт', value: '50–100+ жил ургадаг' }
+                ],
+                description: 'Хүний биеийн хэлбэртэй үндэстэй, дархлааг дээд зэргээр сэргээж, тамир тэнхээ оруулдаг Солонгосын хамгийн алдартай зэрлэг эмийн ургамал.',
+                extraTitle: '🌱 Ургах орчин',
+                extraText: 'Нарны шууд тусгалаас хол, чийглэг хөвдөт уулын ар хажууд маш удаан ургадаг тул олоход туйлын ховор.',
+                images: pairViews('#065F46', '#09090B', '#34D399', '🌿', 'Зэрлэг Хүн Орхоодой', 'Хоргүй • Эмийн хаан')
+              },
+              {
+                id: 'np-plant-2',
+                poisonStatus: 'safe',
+                title: '2. Солонгос Жодоо Гацуур (Гүсаннамү)',
+                subtitle: '✅ Хоргүй • Дэлхийд цорын ганц унаган мод',
+                meta: [
+                  { label: 'Хортой эсэх', value: '✅ Хоргүй (Эфирийн тос ялгаруулна)' },
+                  { label: 'Шинжлэх ухаанд нээсэн', value: '1920 он (Эрнест Уилсон)' },
+                  { label: 'Ургах нөхцөл', value: 'Халласан, Жирисан уулын 1,400м өндөр' },
+                  { label: 'Статус', value: 'IUCN Улаан номд орсон ховор мод' }
+                ],
+                description: 'Дэлхий дээр зөвхөн Өмнөд Солонгосын өндөр уулсад ургадаг мөнх ногоон шилмүүст мод. Шидэт мэт мөнгөлөг шилмүүс, хөх ягаан боргоцойтой.',
+                extraTitle: '🌱 Нээсэн түүх',
+                extraText: '1920 онд ургамал судлаач Эрнест Уилсон Халласан уулнаас дэлхийд шинэ төрөл зүйл болохыг бүртгэжээ.',
+                images: pairViews('#14532D', '#052E16', '#4ADE80', '🌲', 'Солонгос Жодоо Гацуур', 'Хоргүй • Улаан ном')
+              },
+              {
+                id: 'np-plant-3',
+                poisonStatus: 'safe',
+                title: '3. Алтан Хонхон Цэцэг (Кымганчоронкот)',
+                subtitle: '✅ Хоргүй • Солонгосын уулын сувд',
+                meta: [
+                  { label: 'Хортой эсэх', value: '✅ Хоргүй (Үзэсгэлэнт ховор цэцэг)' },
+                  { label: 'Нээсэн он', value: '1909 он (Кымгансан уул)' },
+                  { label: 'Ургах нөхцөл', value: 'Өндөр уулын сэрүүн, чийглэг хадны завсар' },
+                  { label: 'Цэцэглэх үе', value: '8–9-р сар (Цайвар ягаан хонх)' }
+                ],
+                description: 'Доош харсан жижигхэн ягаан хонх мэт дэлбээтэй, зөвхөн Солонгосын уулсад ургадаг эмзэг, ховор цэцэг.',
+                extraTitle: '🌱 Ургах орчин',
+                extraText: 'Зуны халуунд тэсвэргүй тул зөвхөн сэрүүн өндөр уулын сүүдэртэй ойд ургадаг.',
+                images: pairViews('#4C1D95', '#09090B', '#C084FC', '🪻', 'Алтан Хонхон Цэцэг', 'Хоргүй • Эндемик цэцэг')
+              },
+              {
+                id: 'np-plant-4',
+                poisonStatus: 'toxic',
+                title: '4. Хөх Дэгд / Түгүкот (Аконит)',
+                subtitle: '⚠️ ХОРТОЙ УРГАМАЛ • Анхааруулга!',
+                meta: [
+                  { label: 'Хортой эсэх', value: '⚠️ МАШ ХОРТОЙ (Аконитин хор агуулна)' },
+                  { label: 'Түүхэн баримт', value: 'Эртний суманд хор түрхэхэд ашигладаг байв' },
+                  { label: 'Ургах нөхцөл', value: 'Уулын чийглэг хөндий, ойн цоорхой' },
+                  { label: 'Анагаах ухаан', value: 'Зөвхөн тусгай боловсруулалтаар өвчин намдаах' }
+                ],
+                description: 'Дайчны дуулга мэт хэлбэртэй гүн хөх ягаан цэцэгтэй ургамал. Үндэс болон навчиндаа хүчтэй мэдрэлийн хор агуулдаг тул түүхийгээр хүрэх, идэх хориотой.',
+                extraTitle: '⚠️ Аюулгүй байдлын санамж',
+                extraText: 'Хаврын эхэнд хүнсний ургамалтай андуурах эрсдэлтэй тул байгальд тааралдвал огт амсаж болохгүй.',
+                images: pairViews('#31102F', '#09090B', '#F43F5E', '☠️', 'Хөх Дэгд (Түгүкот)', '⚠️ ХОРТОЙ УРГАМАЛ')
+              },
+              {
+                id: 'np-plant-5',
+                poisonStatus: 'safe',
+                title: '5. Омижа (Таван Амтат Жимс)',
+                subtitle: '✅ Хоргүй • Уламжлалт анагаахын жимс',
+                meta: [
+                  { label: 'Хортой эсэх', value: '✅ Хоргүй (Эрүүл мэндийн цай, эм)' },
+                  { label: 'Тэмдэглэсэн он', value: 'XVI зууны "Донъыйбогам" судар' },
+                  { label: 'Ургах нөхцөл', value: 'Мүнгён, Чансү зэрэг сэрүүн уулын бэл' },
+                  { label: 'Онцлог', value: 'Чихэрлэг, исгэлэн, гашуун, давслаг, халуун 5 амт' }
+                ],
+                description: 'Нэг жимснээс хүний амталж чадах таван өөр амт зэрэг мэдрэгддэг улаан багц жимс. Уушги, элэг хамгаалж ядаргаа тайлах шидтэй.',
+                extraTitle: '🌱 Ургах орчин',
+                extraText: 'Ороонго хэлбэрээр ургадаг бөгөөд намрын сэрүүн ороход гүн улаан өнгөтэй болж боловсордог.',
+                images: pairViews('#881337', '#09090B', '#FB7185', '🍒', 'Омижа Таван Амтат Жимс', 'Хоргүй • Эмийн жимс')
+              }
+            ]
+          }
+        ]
+      },
+
+      // -----------------------------------------------------------------------
+      // 2. ТҮҮХИЙН ТАНХИМ
+      // -----------------------------------------------------------------------
+      history: {
+        id: 'history',
+        number: '2',
+        icon: '📜',
+        name: 'Түүхийн танхим',
+        bgClass: 'bg-history',
+        accent: '#F59E0B',
+        borderClass: 'border-amber-500/35 hover:border-amber-400',
+        shortDesc: 'Эртний улсын хаад, Эртний улсын хатад, Дайны үеийн зэвсэг хуяг дуулга.',
+        description: 'Түүхийн танхим нь 3 тусдаа өрөөнд хуваагдана. Сонирхсон өрөөний хаалган дээр дарж дотогш орно уу.',
+        submenus: [
+          {
+            id: 'his-kings',
+            number: '1',
+            icon: '👑',
+            label: '1. Эртний улсын хаад',
+            portalDesc: 'Солонгосын аугаа 5 хааны хөрөг, түүхэн гавьяа болон гэр бүлийн дэлгэрэнгүй мэдээлэл.',
+            countText: '5 хааны хөрөг ба түүх',
+            type: 'grid',
+            items: [
+              {
+                id: 'king-1',
+                title: '1. Сэжон Их Хаан (세종대왕)',
+                subtitle: 'Чосон гүрний 4-р хаан (1418–1450)',
+                meta: [
+                  { label: 'Төр барьсан он', value: '1418 – 1450 он (32 жил)' },
+                  { label: 'Гэр бүл (Хатан)', value: 'Сохён хатан (Шим овгийн)' },
+                  { label: 'Үр хүүхэд', value: '18 хүү, 4 охин (Нийт 22 хүүхэд)' },
+                  { label: 'Агуу гавьяа', value: 'Хангыл үсэг зохиосон, шинжлэх ухаан' }
+                ],
+                description: 'Солонгосын түүхэн дэх хамгийн хайрлагдсан хаан. Ард түмнээ бичиг үсэгтэй болгохын тулд Хангыл цагаан толгойг зохиож, одон орон, хөдөө аж ахуй, хөгжмийг цэцэглүүлсэн.',
+                extraTitle: '👨‍👩‍👧‍👦 Гэр бүлийн мэдээлэл',
+                extraText: 'Эцэг нь Тэжон хаан, эх нь Вонгён хатан. Сохён хатантай эв найрамдалтай амьдарч, том хүү Мүнжон, хоёр дахь хүү Сэжо нар хожим хаан ширээнд суусан.',
+                images: pairViews('#78350F', '#09090B', '#FBBF24', '👑', 'Сэжон Их Хаан', 'Хангыл үсгийг бүтээгч')
+              },
+              {
+                id: 'king-2',
+                title: '2. Гванхэто Их Хаан (광개토대왕)',
+                subtitle: 'Когурё улсын 19-р хаан (391–413)',
+                meta: [
+                  { label: 'Төр барьсан он', value: '391 – 413 он (18 насандаа хаан болсон)' },
+                  { label: 'Гэр бүл', value: 'Эцэг Когукян хаан, хүү Жансү хаан' },
+                  { label: 'Нутаг дэвсгэр', value: 'Манжуур, Солонгосын хойгийн 2/3' },
+                  { label: 'Цол', value: 'Нутаг дэвсгэрийг агуу өргөжүүлэгч хаан' }
+                ],
+                description: 'Когурё улсыг Зүүн Хойд Азийн хамгийн хүчирхэг гүрэн болгож, 64 цайз, 1,400 тосгоныг нэгтгэсэн домогт байлдан дагуулагч хаан.',
+                extraTitle: '👨‍👩‍👧‍👦 Гэр бүлийн мэдээлэл',
+                extraText: 'Түүний хүү Жансү хаан 414 онд эцгийнхээ гавьяаг мөнхжүүлж 6.39 метр өндөр чулуун гэрэлт хөшөө босгосон.',
+                images: pairViews('#7C2D12', '#09090B', '#FB923C', '⚔️', 'Гванхэто Их Хаан', 'Когурёгийн аугаа хаан')
+              },
+              {
+                id: 'king-3',
+                title: '3. Тэжо Ван Гон (태조 왕건)',
+                subtitle: 'Горё гүрнийг үндэслэгч (918–943)',
+                meta: [
+                  { label: 'Төр барьсан он', value: '918 – 943 он' },
+                  { label: 'Гэр бүл', value: '29 хатан, 25 хүү, 9 охин' },
+                  { label: 'Нийслэл', value: 'Кэсон (Сонъак)' },
+                  { label: 'Гавьяа', value: 'Хожуу Гурван улсыг нэгтгэсэн' }
+                ],
+                description: 'Хуваагдмал байсан Хожуу Гурван улсыг энх тайвнаар нэгтгэн Горё гүрнийг байгуулсан ухаалаг удирдагч. "Кореа" (Korea) гэх нэр энэ улсаас гаралтай.',
+                extraTitle: '👨‍👩‍👧‍👦 Гэр бүлийн мэдээлэл',
+                extraText: 'Нутгийн язгууртнуудтай эв нэгдэл тогтоох зорилгоор 29 хатан буулгаж, олон хүүхэдтэй өнөр өтгөн хааны удмыг бий болгосон.',
+                images: pairViews('#451A03', '#09090B', '#F59E0B', '🏯', 'Тэжо Ван Гон', 'Горё гүрнийг үндэслэгч')
+              },
+              {
+                id: 'king-4',
+                title: '4. Жонжо Хаан (정조)',
+                subtitle: 'Чосон гүрний 22-р хаан (1776–1800)',
+                meta: [
+                  { label: 'Төр барьсан он', value: '1776 – 1800 он' },
+                  { label: 'Гэр бүл', value: 'Эцэг Садо хунтайж, хатан Хёы' },
+                  { label: 'Хүүхдүүд', value: 'Сүнжо хаан (хүү), Сүксон гүнж' },
+                  { label: 'Бүтээн байгуулалт', value: 'Хвасон цайз, Кюжангак номын сан' }
+                ],
+                description: 'Чосон гүрний сэргэн мандалтыг авчирсан шинэчлэгч хаан. Нийгмийн давхаргын ялгааг бууруулж, шинжлэх ухаан, урлагийг дэмжсэн.',
+                extraTitle: '👨‍👩‍👧‍👦 Гэр бүлийн мэдээлэл',
+                extraText: 'Эцэг Садо хунтайжийнхаа дурсгалд зориулж Сүвон хотод ЮНЕСКО-гийн өв болох Хвасон цайзыг бариулжээ.',
+                images: pairViews('#713F12', '#09090B', '#FDE047', '📜', 'Жонжо Хаан', 'Чосоны шинэчлэгч хаан')
+              },
+              {
+                id: 'king-5',
+                title: '5. Жинхын Хаан (진흥왕)',
+                subtitle: 'Шилла улсын 24-р хаан (540–576)',
+                meta: [
+                  { label: 'Төр барьсан он', value: '540 – 576 он (7 насандаа хаан болсон)' },
+                  { label: 'Гэр бүл', value: 'Эх Жисү хатан, хатан Садо' },
+                  { label: 'Хүүхдүүд', value: 'Доннён хунтайж, Жинжи хаан' },
+                  { label: 'Байгууллага', value: 'Хваран залуу дайчдын бүлгэм' }
+                ],
+                description: 'Хваран буюу "Цэцэгт залуу баатрууд"-ын сургуулийг байгуулж, Хан мөрний хөндийг эзэлснээр Шилла улс гурван улсыг нэгтгэх суурийг тавьсан.',
+                extraTitle: '👨‍👩‍👧‍👦 Гэр бүлийн мэдээлэл',
+                extraText: 'Балчир насандаа хаан ширээнд суусан тул эх Жисү хатан нь эхний жилүүдэд төрийн хэргийг амжилттай удирдан тусалжээ.',
+                images: pairViews('#4C1D95', '#09090B', '#C084FC', '🛡️', 'Жинхын Хаан', 'Хваран баатруудыг үндэслэгч')
+              }
+            ]
+          },
+          {
+            id: 'his-queens',
+            number: '2',
+            icon: '👸',
+            label: '2. Эртний улсын хатад',
+            portalDesc: 'Солонгосын түүхэн 5 хатны хөрөг, түүх, хэний хатан байсан болон хэдэн хүүхэдтэй тухай мэдээлэл.',
+            countText: '5 хатны хөрөг ба түүх',
+            type: 'grid',
+            items: [
+              {
+                id: 'queen-1',
+                title: '1. Сондок Хатан Хаан (선덕여왕)',
+                subtitle: 'Шилла улсын 27-р удирдагч (632–647)',
+                meta: [
+                  { label: 'Хэний хатан / Угсаа', value: 'Жинпён хааны ууган охин (Анхны эмэгтэй хаан)' },
+                  { label: 'Хэдэн хүүхэдтэй', value: 'Хүүхэдгүй (Үеэл Жиндок хаан залгамжилсан)' },
+                  { label: 'Нөхөр', value: 'Ымгалбан' },
+                  { label: 'Өв соёл', value: 'Чомсондэ одон орны цамхаг бариулсан' }
+                ],
+                description: 'Солонгосын түүхэн дэх анхны эмэгтэй хаан. Алсын хараатай дипломат бодлого явуулж, шинжлэх ухаан, буддын соёлыг дэмжсэн цэцэн хатан.',
+                extraTitle: '👑 Түүхэн баримт',
+                extraText: 'Хятадын Тан улсаас ирүүлсэн цээнэ цэцгийн зурагт эрвээхэй зураагүйг хараад энэ цэцэг үнэргүй болохыг урьдчилан мэдсэн цэцэн ухаанаараа алдартай.',
+                images: pairViews('#881337', '#09090B', '#FB7185', '👸', 'Сондок Хатан Хаан', 'Солонгосын анхны эмэгтэй хаан')
+              },
+              {
+                id: 'queen-2',
+                title: '2. Сохён Хатан (소헌왕후)',
+                subtitle: 'Чосон гүрний Их Хатан (1395–1446)',
+                meta: [
+                  { label: 'Хэний хатан', value: 'Сэжон Их Хааны гэргий' },
+                  { label: 'Хэдэн хүүхэдтэй', value: '10 хүүхэд (8 хүү, 2 охин)' },
+                  { label: 'Хүүхдүүд нь', value: 'Мүнжон хаан, Сэжо хаан, Анпён хунтайж' },
+                  { label: 'Зан чанар', value: 'Энэрэнгүй, даруу, ухаалаг' }
+                ],
+                description: 'Сэжон Их Хааны түшиг тулгуур болж, хааны ордны дотоод эв найрамдлыг сахиж, хоёр хүүгээ хаан ширээнд хүргэсэн Чосон гүрний үлгэр жишээ хатан.',
+                extraTitle: '👑 Гэр бүлийн түүх',
+                extraText: '8 хүү, 2 охин төрүүлж өсгөсөн бөгөөд түүний хөвгүүд урлаг, бичиг соёл, төрийн хэрэгт онцгой авьяастай байв.',
+                images: pairViews('#9F1239', '#09090B', '#F43F5E', '👘', 'Сохён Хатан', 'Сэжон хааны гэргий • 10 хүүхэдтэй')
+              },
+              {
+                id: 'queen-3',
+                title: '3. Мёнсон Хатан Хаан (명성황후)',
+                subtitle: 'Солонгосын Эзэнт Гүрний Хатан Хаан (1851–1895)',
+                meta: [
+                  { label: 'Хэний хатан', value: 'Кожон хааны гэргий' },
+                  { label: 'Хэдэн хүүхэдтэй', value: '4 хүү, 1 охин (Сүнжон хаан амьд үлдсэн)' },
+                  { label: 'Улс төр', value: 'Гадаадын түрэмгийллийн эсрэг тэмцэгч' },
+                  { label: 'Боловсрол', value: 'Шинэчлэл, боловсролыг дэмжигч' }
+                ],
+                description: 'XIX зууны эгзэгтэй үед эх орныхоо тусгаар тогтнолыг хамгаалахын тулд ухаалаг дипломат бодлого явуулж, орчин үеийн сургууль байгуулахад хувь нэмэр оруулсан хатан.',
+                extraTitle: '👑 Түүхэн баримт',
+                extraText: 'Түүний цорын ганц амьд үлдсэн хүү нь Чосон гүрний сүүлчийн хаан Сүнжон болсон.',
+                images: pairViews('#4C1D95', '#09090B', '#A78BFA', '👑', 'Мёнсон Хатан Хаан', 'Кожон хааны гэргий')
+              },
+              {
+                id: 'queen-4',
+                title: '4. Шин Саимдан (신사임당)',
+                subtitle: 'Алдарт зураач, яруу найрагч, соён гэгээрүүлэгч (1504–1551)',
+                meta: [
+                  { label: 'Хэний гэргий', value: 'Түшмэл И Вон-сүгийн гэргий' },
+                  { label: 'Хэдэн хүүхэдтэй', value: '7 хүүхэд (4 хүү, 3 охин)' },
+                  { label: 'Алдарт хүү', value: 'И Юльгок (Аугаа гүн ухаантан)' },
+                  { label: 'Хүндэтгэл', value: '50,000 воны дэвсгэрт дээр дүрслэгдсэн' }
+                ],
+                description: 'Хэдийгээр хаан угсаа биш боловч Солонгосчуудын "Үндэсний Эх" хэмээн дээдэлдэг суут зураач, яруу найрагч бөгөөд аугаа эрдэмтэн И Юльгокийн ээж.',
+                extraTitle: '👑 Гэр бүл ба Урлаг',
+                extraText: 'Түүний 7 хүүхэд бүгд уран зураг, яруу найраг, эрдэм номд гарамгай суралцсан нь эхийн хүмүүжлийн гайхамшиг юм.',
+                images: pairViews('#0F766E', '#09090B', '#2DD4BF', '🎨', 'Шин Саимдан', '7 хүүхэдтэй • 50,000 воны хөрөг')
+              },
+              {
+                id: 'queen-5',
+                title: '5. Хёы Хатан (효의왕후)',
+                subtitle: 'Чосон гүрний 22-р хааны хатан (1753–1821)',
+                meta: [
+                  { label: 'Хэний хатан', value: 'Жонжо хааны албан ёсны их хатан' },
+                  { label: 'Хэдэн хүүхэдтэй', value: 'Өөрийн төрүүлсэн хүүхэдгүй (Сүнжо хааныг өргөж өсгөсөн)' },
+                  { label: 'Зан чанар', value: 'Өгөөмөр, шударга, ордны түшиг' },
+                  { label: 'Нас', value: '67 насалсан' }
+                ],
+                description: '9 настайдаа хунтайжтай сүй тавьж, Жонжо хааны бүхий л хүнд хэцүү үед дэргэд нь үнэнчээр зогсож, дараагийн хааныг өсгөн хүмүүжүүлсэн эрхэм хатан.',
+                extraTitle: '👑 Түүхэн баримт',
+                extraText: 'Тэрээр өөрийн эд хөрөнгөө ядуу иргэдэд хандивлаж, ордны ажилчдыг ялгаварлалгүй энэрэнгүй ханддаг байв.',
+                images: pairViews('#78350F', '#09090B', '#FBBF24', '🌸', 'Хёы Хатан', 'Жонжо хааны их хатан')
+              }
+            ]
+          },
+          {
+            id: 'his-war',
+            number: '3',
+            icon: '⚔️',
+            label: '3. Дайны үе (Зэвсэг, хуяг дуулга)',
+            portalDesc: 'Түүхэн сэлэм, буу зэвсэг, пуужин харвагч, жанжны хуяг дуулга болон хэнийх байсан тухай мэдээлэл.',
+            countText: '5 түүхэн зэр зэвсэг',
+            type: 'grid',
+            items: [
+              {
+                id: 'war-1',
+                title: '1. И Сүншин Жанжны Урт Сэлэм (장검)',
+                subtitle: '1594 он • 197.5 см урт хос сэлэм',
+                meta: [
+                  { label: 'Хэнийх байсан', value: 'Тэнгисийн цэргийн жанжин И Сүншин' },
+                  { label: 'Урт ба Жин', value: '197.5 см урт, 5.3 кг жинтэй' },
+                  { label: 'Бичээс', value: '"Нэг цавчилтаар тэнгэр газрыг улаанаар будна"' },
+                  { label: 'Дайны үе', value: 'Имжиний дайн (1592–1598)' }
+                ],
+                description: 'Японы түрэмгийллийн эсрэг 23 тулаанд дараалан ялсан домогт жанжин И Сүншиний биедээ авч явдаг байсан аварга хос сэлэм.',
+                extraTitle: '⚔️ Түүхэн үнэн',
+                extraText: 'Тулаанд шууд цавчихаас илүүтэй усан онгоцны тавцан дээрээс цэргүүддээ тушаал өгөх, сүр хүчийг илтгэх бэлгэдэл болж байв.',
+                images: pairViews('#7F1D1D', '#09090B', '#F87171', '🗡️', 'И Сүншин Жанжны Сэлэм', '197.5 см • И Сүншиний өмч')
+              },
+              {
+                id: 'war-2',
+                title: '2. Хвача — Олон Сумт Пуужин Харвагч',
+                subtitle: '1451 он • Мүнжон хааны үе',
+                meta: [
+                  { label: 'Хэнийх байсан', value: 'Чосон гүрний их бууны анги (Квон Юль жанжин)' },
+                  { label: 'Хүчин чадал', value: 'Нэг дор 100–200 галт сум харвана' },
+                  { label: 'Тусах зай', value: '450–500 метр' },
+                  { label: 'Алдарт тулаан', value: 'Хэнжү цайзын хамгаалалт (1593)' }
+                ],
+                description: 'Хоёр дугуйтай тэргэн дээр суурилуулсан дарьт пуужин харвагч. Хэнжү цайзын тулаанд 3,000 Солонгос цэрэг 30,000 дайсныг ялахад шийдвэрлэх үүрэг гүйцэтгэсэн.',
+                extraTitle: '🔥 Дайны технологи',
+                extraText: 'Дэлхийн анхны олон хошуут тийрэлтэт пуужингийн системийн өвөг гэж цэргийн түүхчид үздэг.',
+                images: pairViews('#7C2D12', '#09090B', '#FB923C', '🏹', 'Хвача Пуужин Харвагч', 'Нэг дор 200 галт сум')
+              },
+              {
+                id: 'war-3',
+                title: '3. Чосон Жанжны Луун Хээтэй Хуяг Дуулга (Түжонгап)',
+                subtitle: 'XVI–XVIII зуун • Хааны торгон цэргийн жанжин',
+                meta: [
+                  { label: 'Хэнийх байсан', value: 'Чосон гүрний дээд цолтой цэргийн жанжин' },
+                  { label: 'Материал', value: 'Хөвөн даавуу, дотор талдаа төмөр ялтас, гууль' },
+                  { label: 'Жин', value: '12 – 15 кг' },
+                  { label: 'Хамгаалалт', value: 'Сум, сэлэм болон хүйтэн жавраас хамгаална' }
+                ],
+                description: 'Гадна талаасаа улаан, хөх торгон дээр алтан хадаас хадсан харагдах боловч дотор талдаа давхарласан ган ялтастай ухаалаг хуяг дуулга.',
+                extraTitle: '🛡️ Хийцийн онцлог',
+                extraText: 'Хүйтэн өвөл төмөр хуяг арьсанд наалдаж хөлдөхөөс сэргийлж төмөр ялтсыг даавууны дотор талд бэхэлдэг байв.',
+                images: pairViews('#451A03', '#09090B', '#FBBF24', '🛡️', 'Чосон Жанжны Хуяг Дуулга', 'Дотор талдаа ган ялтастай')
+              },
+              {
+                id: 'war-4',
+                title: '4. Шингижон — Тэсрэх Галт Сум',
+                subtitle: '1448 он • Сэжон хааны үеийн нууц зэвсэг',
+                meta: [
+                  { label: 'Хэнийх байсан', value: 'Чосон гүрний хойд хилийн цэргийн арми' },
+                  { label: 'Хэмжээ', value: '1.1 м (Жижиг) – 5.5 м (Аварга Шингижон)' },
+                  { label: 'Зарчим', value: 'Дарьт тийрэлтэт хөдөлгүүр + цагтай тэсрэх бөмбөг' },
+                  { label: 'Хэрэглээ', value: 'Дайсны хуаран, хөлөг онгоцыг шатаах' }
+                ],
+                description: 'Хулсан сумны үзүүрт дарьтай цаасан хоолой бэхэлж, байнд тусмагцаа дэлбэрдэг Чосон гүрний өндөр нууцлалтай пуужин сум.',
+                extraTitle: '💥 Түүхэн баримт',
+                extraText: 'Зураг төслийг нь "Күкжоорэый" сударт миллиметр бүрийн нарийвчлалтай тэмдэглэж үлдээсэн байдаг.',
+                images: pairViews('#881337', '#09090B', '#FB7185', '🧨', 'Шингижон Галт Сум', '1448 оны нууц зэвсэг')
+              },
+              {
+                id: 'war-5',
+                title: '5. Бипха Хэлбэрт Хүрэл Сэлэм (비파형동검)',
+                subtitle: 'МЭӨ VIII зуун • Эртний Кочосон улс',
+                meta: [
+                  { label: 'Хэнийх байсан', value: 'Эртний Кочосон улсын язгууртан дайчид' },
+                  { label: 'Хэлбэр', value: 'Пипа хөгжим шиг долгионтой ир' },
+                  { label: 'Материал', value: 'Хүрэл ба цайрын хольц' },
+                  { label: 'Түүх', value: 'Солонгосын анхны улс Кочосоны бэлгэдэл' }
+                ],
+                description: 'Ир нь хөгжмийн зэмсэг мэт өвөрмөц муруй хэлбэртэй хүрэл сэлэм. Зөвхөн дайны зэвсэг бус овог аймгийн удирдагчийн эрх мэдлийн тэмдэг байв.',
+                extraTitle: '⚔️ Археологийн утга',
+                extraText: 'Энэ сэлэм олдсон бүс нутгаар эртний Кочосон улсын хил хязгаарыг тогтоодог.',
+                images: pairViews('#064E3B', '#09090B', '#34D399', '🗡️', 'Кочосоны Хүрэл Сэлэм', 'МЭӨ VIII зууны олдвор')
+              }
+            ]
+          }
+        ]
+      },
+
+      // -----------------------------------------------------------------------
+      // 3. СОЁЛ УРЛАГИЙН ТАНХИМ
+      // -----------------------------------------------------------------------
+      culture: {
+        id: 'culture',
+        number: '3',
+        icon: '🎎',
+        name: 'Соёл урлагийн танхим',
+        bgClass: 'bg-culture',
+        accent: '#F43F5E',
+        borderClass: 'border-rose-500/35 hover:border-rose-400',
+        shortDesc: 'Хөгжим, Жүжиг, Яруу найргийн гурван тусдаа урлагийн өрөө.',
+        description: 'Солонгосын сэтгэл зүрх болсон уламжлалт хөгжмийн аялгуу, сонгодог жүжгийн зохиол болон яруу найргийн охь дээжийн өрөөнүүд.',
+        submenus: [
+          {
+            id: 'cul-music',
+            number: '1',
+            icon: '🪕',
+            label: '1. Хөгжим',
+            portalDesc: 'Солонгосын 5 уламжлалт хөгжмийн зэмсгийн үүсэл гарал, хийц, бүтээгч болон хэрхэн дуугардаг тухай.',
+            countText: '5 хөгжмийн зэмсэг + эгшиг сонсох',
+            type: 'grid',
+            items: [
+              {
+                id: 'mus-1', freq: 392, wave: 'triangle',
+                title: '1. Каяагым (가야금) — 12 Утаст Ятга',
+                subtitle: 'МЭ VI зуун • Каяа улс',
+                meta: [
+                  { label: 'Үүсэл гарал', value: 'МЭ 551 он, Каяа улсын Гасил хаан' },
+                  { label: 'Хэн бүтээсэн', value: 'У Рык хөгжимчин боловсронгуй болгосон' },
+                  { label: 'Хийц', value: 'Павловниа мод, 12 эрчилсэн торгон утас' },
+                  { label: 'Хэрхэн дуугардаг', value: 'Урсах горхи мэт зөөлөн, тунгалаг, уянгалаг' }
+                ],
+                description: 'Өвдөг дээрээ тавьж баруун гараар утсыг татаж, зүүн гараар утсыг дарж чичиргээ үүсгэн тоглодог Солонгосын хамгийн алдартай чавхдаст хөгжим.',
+                extraTitle: '🎵 Дуугаралтын онцлог',
+                extraText: '12 утас нь жилийн 12 сарыг бэлгэдэх бөгөөд зүүн гараар утсыг дарахад хүний хоолой шиг уйлж, инээх мэт чичиргээт өнгө гардаг.',
+                images: pairViews('#881337', '#09090B', '#FB7185', '🪕', 'Каяагым 12 Утаст Ятга', 'У Рык бүтээсэн • Тунгалаг аялгуу')
+              },
+              {
+                id: 'mus-2', freq: 196, wave: 'sawtooth',
+                title: '2. Комунго (거문고) — 6 Утаст Язгууртны Хөгжим',
+                subtitle: 'МЭ IV зуун • Когурё улс',
+                meta: [
+                  { label: 'Үүсэл гарал', value: 'Когурё улс (IV зуун)' },
+                  { label: 'Хэн бүтээсэн', value: 'Ван Сан-Ак сайд' },
+                  { label: 'Хийц', value: 'Хулсан савхаар (Сүльдэ) цохиж тоглодог 6 утас' },
+                  { label: 'Хэрхэн дуугардаг', value: 'Гүн басс, сүрлэг, эршүүд нам дуу' }
+                ],
+                description: 'Эрдэмтэн мэргэдийн сэтгэлээ ариусгахын тулд тоглодог байсан эрхэмсэг хөгжим. Хулсан цохиураар утсыг цохиж дуугаргадаг.',
+                extraTitle: '🎵 Домог ба Дуугаралт',
+                extraText: 'Ван Сан-Ак хөгжмийг тоглоход хар тогоруу шувуу нисэн ирж бүжиглэсэн тул "Хар тогорууны ятга" хэмээн нэрлэжээ.',
+                images: pairViews('#4C1D95', '#09090B', '#C084FC', '🎻', 'Комунго 6 Утаст Хөгжим', 'Ван Сан-Ак • Гүн басс аялгуу')
+              },
+              {
+                id: 'mus-3', freq: 523.25, wave: 'sine',
+                title: '3. Хэгым (해금) — 2 Утаст Хуур',
+                subtitle: 'Горё гүрний үе • Хоёр чавхдаст хуур',
+                meta: [
+                  { label: 'Үүсэл гарал', value: 'XI зуун, Горё гүрэн' },
+                  { label: 'Хэн бүтээсэн', value: 'Горё улсын ордны хөгжмийн урчууд' },
+                  { label: 'Хийц', value: 'Хулсан цар, морины сүүлэн нум, 2 торгон утас' },
+                  { label: 'Хэрхэн дуугардаг', value: 'Хүний хоолой шиг уянгалаг, гунигтай бөгөөд хөгжилтэй' }
+                ],
+                description: 'Монгол морин хууртай гарал нэгтэй босоо хуур. Ердөө хоёрхон утастай ч баяр баясгалан, уйтгар гунигийг хамгийн гүн илэрхийлдэг.',
+                extraTitle: '🎵 Дуугаралтын онцлог',
+                extraText: 'Модон хайрцаг, хулс, торго, морины сүүл зэрэг 8 байгалийн материал ордог тул "Найман авианы хөгжим" гэдэг.',
+                images: pairViews('#78350F', '#09090B', '#FBBF24', '🎻', 'Хэгым 2 Утаст Хуур', 'Хүний хоолой мэт уянгалаг')
+              },
+              {
+                id: 'mus-4', freq: 659.25, wave: 'square',
+                title: '4. Тэпёнсо (태평소) — Их Энх Тайвны Бүрээ',
+                subtitle: 'Горё – Чосон • Модон бүрээ',
+                meta: [
+                  { label: 'Үүсэл гарал', value: 'XIV зууны сүүл үе' },
+                  { label: 'Хэн бүтээсэн', value: 'Горё-Чосоны цэргийн хөгжимчид' },
+                  { label: 'Хийц', value: 'Чавганы модон их бие, гуулин амсар, хулсан хэл' },
+                  { label: 'Хэрхэн дуугардаг', value: 'Маш чанга, цоглог, алс хол цуурайтна' }
+                ],
+                description: '"Аугаа энх тайвны бүрээ" гэсэн утгатай үлээвэр хөгжим. Задгай талбайд ч бусад бүх хөгжмөөс давж тод цуурайтдаг хүчирхэг дуутай.',
+                extraTitle: '🎵 Дуугаралтын онцлог',
+                extraText: 'Баяр наадам болон хааны сүрлэг жагсаалын уур амьсгалыг эрч хүчээр дүүргэдэг.',
+                images: pairViews('#9F1239', '#09090B', '#F43F5E', '🎺', 'Тэпёнсо Бүрээ', 'Чанга, цоглог цуурай')
+              },
+              {
+                id: 'mus-5', freq: 130.8, wave: 'sine',
+                title: '5. Жангү (장구) — Элсэн Цаг Хэлбэрт Бөмбөр',
+                subtitle: 'МЭ XI зуун • Хоёр талт бөмбөр',
+                meta: [
+                  { label: 'Үүсэл гарал', value: 'Горё гүрэн (1076 онд тэмдэглэгдсэн)' },
+                  { label: 'Хэн бүтээсэн', value: 'Уламжлалт цохивор хөгжмийн урчууд' },
+                  { label: 'Хийц', value: 'Павловниа модон их бие, морь болон үхрийн шир' },
+                  { label: 'Хэрхэн дуугардаг', value: 'Нэг тал нь бүдүүн "Дүн", нөгөө тал нь цовоо "Так"' }
+                ],
+                description: 'Солонгосын бүх хөгжмийн хэмнэлийг удирддаг гол цохивор хөгжим. Хоёр тал нь өөр зузаантай арьсаар бүрэгдсэн тул эр, эм хоёр өөр өнгө гаргадаг.',
+                extraTitle: '🎵 Дуугаралтын онцлог',
+                extraText: 'Зүүн тал нь дэлхий (бүдүүн дуу), баруун тал нь тэнгэр (нарийн цовоо дуу)-ийг бэлгэддэг.',
+                images: pairViews('#0F766E', '#09090B', '#2DD4BF', '🥁', 'Жангү Хоёр Талт Бөмбөр', 'Хэмнэлийн хаан')
+              }
+            ]
+          },
+          {
+            id: 'cul-drama',
+            number: '2',
+            icon: '🎭',
+            label: '2. Жүжиг',
+            portalDesc: 'Солонгосын топ 5 сонгодог жүжгийн зохиолч болон үйл явдлын товчлолыг үзнэ үү.',
+            countText: 'Солонгосын топ 5 жүжиг',
+            type: 'grid',
+            items: [
+              {
+                id: 'dra-1',
+                title: '1. Чүнхянжон (춘향전 — Чүнхяны Домог)',
+                subtitle: 'Солонгосын хамгийн алдартай хайрын сонгодог жүжиг',
+                meta: [
+                  { label: 'Зохиолч', value: 'Ардын аман зохиол / Шин Жэ-хё шинэчилсэн' },
+                  { label: 'Гол дүрүүд', value: 'Сон Чүнхян ба И Монрён' },
+                  { label: 'Төрөл', value: 'Пансори дуулалт жүжиг / Чангык' },
+                  { label: 'Үзэл санаа', value: 'Үнэнч хайр ба шударга ёсны ялалт' }
+                ],
+                description: 'Язгууртан залуу И Монрён болон энгийн ардын охин Чүнхян хоёрын ариун хайр сэтгэл, харгис түшмэл Бён Хакдогийн дарамтыг сөрөн зогссон тухай өгүүлнэ.',
+                extraTitle: '🎭 Үйл явдлын товчлол',
+                extraText: 'Монрён Сөүл рүү шалгалт өгөхөөр явсан хойгуур шинэ захирагч Чүнхяныг шоронд хорино. Монрён хааны нууц элч (Амхэнъоса) болон эргэн ирж хайртыгаа аварна.',
+                images: pairViews('#881337', '#09090B', '#FB7185', '🎭', 'Чүнхянжон Жүжиг', 'Шин Жэ-хё • Үнэнч хайрын түүх')
+              },
+              {
+                id: 'dra-2',
+                title: '2. Шимчонжон (심청전 — Энэрэлт Охин Шимчон)',
+                subtitle: 'Эцэг эхээ энэрэх сэтгэлийн тухай сонгодог жүжиг',
+                meta: [
+                  { label: 'Зохиолч', value: 'Уламжлалт Пансори / Шин Жэ-хё' },
+                  { label: 'Гол дүрүүд', value: 'Шимчон ба сохор эцэг Шим Хакгю' },
+                  { label: 'Төрөл', value: 'Эмгэнэлт ба баярт дуулалт жүжиг' },
+                  { label: 'Үзэл санаа', value: 'Эцгийн төлөөх агуу золиос, гайхамшиг' }
+                ],
+                description: 'Хараагүй эцгийнхээ нүдийг нээлгэхийн тулд сүмд 300 шуудай будаа өргөхөөр өөрийгөө далайн дагинад өргөл болгон Инъдансу тэнгист үсэрсэн охины тухай.',
+                extraTitle: '🎭 Үйл явдлын товчлол',
+                extraText: 'Далайн хаан Шимчоны ариун сэтгэлийг биширч бадамлянхуа цэцгэнд суулган буцааж илгээнэ. Шимчон хатан болж, эцэг нь охиныхоо дууг сонсоод хараа ордог.',
+                images: pairViews('#1E3A8A', '#09090B', '#60A5FA', '🪷', 'Шимчонжон Жүжиг', 'Энэрэлт охины түүх')
+              },
+              {
+                id: 'dra-3',
+                title: '3. Хынбүжон (흥부전 — Хынбү ба Нолбү)',
+                subtitle: 'Сайн сэтгэл ба шуналын тухай инээдмийн жүжиг',
+                meta: [
+                  { label: 'Зохиолч', value: 'Чосон гүрний уламжлалт жүжиг' },
+                  { label: 'Гол дүрүүд', value: 'Сайхан сэтгэлт дүү Хынбү, шуналтай ах Нолбү' },
+                  { label: 'Бэлгэдэл', value: 'Хөлөө хугалсан хараацай ба шидэт хулуу' },
+                  { label: 'Төрөл', value: 'Хошин шог, сургамжит жүжиг' }
+                ],
+                description: 'Хөлөө хугалсан хараацай шувууг эмчилж эдгээсэн ядуу Хынбүд хараацай алт эрдэнэс дүүрэн хулууны үр авчирч өгсөн тухай хөгжилтэй жүжиг.',
+                extraTitle: '🎭 Үйл явдлын товчлол',
+                extraText: 'Шуналтай ах Нолбү дуурайж хараацайн хөлийг зориуд хугалаад эмчилсэн боловч түүний хулуунаас чөтгөрүүд гарч ирж сургамж өгдөг.',
+                images: pairViews('#065F46', '#09090B', '#34D399', '🐦', 'Хынбүжон Жүжиг', 'Сайхан сэтгэлийн шагнал')
+              },
+              {
+                id: 'dra-4',
+                title: '4. Бонсан Тальчүм (봉산탈춤 — Багт Бүжиг Жүжиг)',
+                subtitle: 'ЮНЕСКО-гийн биет бус өв • Ардын хошин жүжиг',
+                meta: [
+                  { label: 'Зохиолч', value: 'Хванхэ мужийн ардын театрын хамтлаг' },
+                  { label: 'Бүтэц', value: '7 үзэгдэл бүхий бүжиг, яриа, дуу' },
+                  { label: 'Сэдэв', value: 'Хуурамч язгууртнуудыг егөөдөх' },
+                  { label: 'Онцлог', value: 'Үзэгчидтэй шууд харилцаж тоглодог' }
+                ],
+                description: 'Ард иргэд баг зүүж, ихэмсэг язгууртнууд болон ёс суртахуунгүй лам нарыг хурц хошин яриа, эрч хүчтэй бүжгээр егөөдөн шүүмжилдэг жүжиг.',
+                extraTitle: '🎭 Үйл явдлын товчлол',
+                extraText: 'Ухаалаг зарц Мальтүги эздийнхээ тэнэг үйлдлийг олон нийтийн өмнө хөгжилтэйгөөр илчилж үзэгчдийг инээлгэнэ.',
+                images: pairViews('#78350F', '#09090B', '#FBBF24', '👹', 'Бонсан Багт Жүжиг', '7 үзэгдэлт ардын театр')
+              },
+              {
+                id: 'dra-5',
+                title: '5. Тонъён Огванде (통영오광대 — Таван Алиалагчийн Жүжиг)',
+                subtitle: 'Өмнөд эргийн уламжлалт театр',
+                meta: [
+                  { label: 'Зохиолч', value: 'Тонъён хотын уламжлалт театрын уран бүтээлчид' },
+                  { label: 'Үзэгдэл', value: '5 бүлэг (Таван зүгийн сахиус)' },
+                  { label: 'Хөгжим', value: 'Жангү, Тэпёнсо, хүрэл цан' },
+                  { label: 'Утга', value: 'Муу ёрыг хөөж, амар амгалан авчрах' }
+                ],
+                description: 'Таван өөр өнгийн баг зүүсэн жүжигчид хүний амьдралын жаргал зовлон, гэр бүлийн харилцаа, шударга ёсыг хөгжим бүжгээр илэрхийлдэг.',
+                extraTitle: '🎭 Үйл явдлын товчлол',
+                extraText: 'Жүжгийн төгсгөлд арслан бүжиг гарч бүх муу энергийг үлдэн хөөж, үзэгчдэд сайн сайхныг ерөөдөг.',
+                images: pairViews('#9D174D', '#09090B', '#F472B6', '🎪', 'Тонъён Огванде Жүжиг', 'Таван зүгийн багт театр')
+              }
+            ]
+          },
+          {
+            id: 'cul-poetry',
+            number: '3',
+            icon: '✍️',
+            label: '3. Яруу найраг',
+            portalDesc: 'Солонгосын суут яруу найрагчдын 5 алдарт шүлэг, тэдгээрийн утга санаа, бүтээгдсэн түүх.',
+            countText: '5 алдарт шүлэг',
+            type: 'grid',
+            items: [
+              {
+                id: 'poe-1',
+                title: '1. "Од Тоолох Шөнө" (별 헤는 밤)',
+                subtitle: 'Яруу найрагч: Юн Донжү (1941 он)',
+                meta: [
+                  { label: 'Яруу найрагч', value: 'Юн Донжү (1917–1945)' },
+                  { label: 'Бичсэн он', value: '1941 оны 11-р сарын 5' },
+                  { label: 'Төрөл', value: 'Уянгын, эх оронч шүлэг' },
+                  { label: 'Утга', value: 'Эх орон, ээж, залуу насны гэгээн дурсамж' }
+                ],
+                description: '“Нэг одонд дурсамж,\nНэг одонд хайр,\nНэг одонд ганцаардал,\nНэг одонд хүсэл тэмүүлэл,\nНэг одонд шүлэг,\nНэг одонд Ээж ээ, ээж ээ...”',
+                extraTitle: '✍️ Яруу найрагчийн тухай',
+                extraText: 'Юн Донжү нь колончлолын харанхуй цаг үед ч цэвэр ариун сэтгэл, эх орныхоо эрх чөлөөг мөрөөдөж бичсэн Солонгосын хамгийн хайртай яруу найрагч.',
+                images: pairViews('#1E1B4B', '#09090B', '#818CF8', '✍️', 'Од Тоолох Шөнө', 'Юн Донжү (1941)')
+              },
+              {
+                id: 'poe-2',
+                title: '2. "Азалия Цэцэг" (진달래꽃)',
+                subtitle: 'Яруу найрагч: Ким Совол (1922 он)',
+                meta: [
+                  { label: 'Яруу найрагч', value: 'Ким Совол (1902–1934)' },
+                  { label: 'Нийтэлсэн он', value: '1922 он' },
+                  { label: 'Хэмнэл', value: 'Уламжлалт ардын дууны 3-4 үет хэмнэл' },
+                  { label: 'Утга', value: 'Хагацлын гуниг ба хайртдаа ерөөх сэтгэл' }
+                ],
+                description: '“Намайг харахаас залхаад\nЧи минь одвол\nБи үг дуугүй зөөлөн үдэн явуулъя.\nЁнбёны Яксан уулын\nЯгаан азалия цэцгийг\nТэвэр дүүрэн түүгээд зам дээр чинь дэвсье...”',
+                extraTitle: '✍️ Яруу найрагчийн тухай',
+                extraText: 'Ким Совол нь Солонгос ардын аман зохиолын уянгалаг хэмнэлийг орчин үеийн яруу найрагт төгс шингээсэн суут найрагч юм.',
+                images: pairViews('#881337', '#09090B', '#FB7185', '🌺', 'Азалия Цэцэг', 'Ким Совол (1922)')
+              },
+              {
+                id: 'poe-3',
+                title: '3. "Өвлийн Урт Шөнийг Тас Хэрчинэ" (동짓달 기나긴 밤을)',
+                subtitle: 'Яруу найрагч: Хван Жини (XVI зуун)',
+                meta: [
+                  { label: 'Яруу найрагч', value: 'Хван Жини (Чосон гүрний суут найрагч)' },
+                  { label: 'Төрөл', value: 'Шижо (Солонгосын сонгодог богино шүлэг)' },
+                  { label: 'Уран дүрслэл', value: 'Цаг хугацааг даавуу мэт хуйлж хадгалах' },
+                  { label: 'Утга', value: 'Хайртай хүнээ хүлээх сэтгэл' }
+                ],
+                description: '“Өвлийн туйлын хамгийн урт шөнийн дундуур тас хэрчиж,\nХаврын дулаан салхи мэт хөнжил доогуур эвхэн хадгалаад,\nХайрт минь эргэн ирэх тэр л шөнө\nҮе үеэр нь дэлгэн уртасгахсан...”',
+                extraTitle: '✍️ Яруу найрагчийн тухай',
+                extraText: 'Хван Жини нь XVI зууны үед амьдарч байсан гоо үзэсгэлэн, хөгжим, яруу найргийн гайхамшигт авьяастан байв.',
+                images: pairViews('#31102F', '#09090B', '#F472B6', '🌙', 'Өвлийн Урт Шөнө', 'Хван Жини • Сонгодог Шижо')
+              },
+              {
+                id: 'poe-4',
+                title: '4. "Цагаан Морьтой Баатар" (광야 — Өргөн Тал)',
+                subtitle: 'Яруу найрагч: И Юк-са (1945 он)',
+                meta: [
+                  { label: 'Яруу найрагч', value: 'И Юк-са (1904–1944)' },
+                  { label: 'Төрөл', value: 'Туульсын, эрэлхэг яруу найраг' },
+                  { label: 'Утга', value: 'Эх орны эрх чөлөөний төлөөх итгэл' },
+                  { label: 'Дүрслэл', value: 'Өргөн уудам тал ба цагаан морьтой баатар' }
+                ],
+                description: '“Эрт дээр цагт тэнгэр анх нээгдэж,\nХаа нэгтээ тахиа донгодох чимээ сонсогдоогүй байхад...\nОдоо энд цас бударч,\nЦэцгийн үнэр алсад түгэх үед\nМянган жилийн дараа цагаан морь унасан баатар\nЭнэ өргөн талд дуулан ирнэ...”',
+                extraTitle: '✍️ Яруу найрагчийн тухай',
+                extraText: 'Тэрээр тусгаар тогтнолын төлөө тэмцэж 17 удаа шоронд хоригдсон ч итгэл найдвараа алдалгүй энэ шүлгийг туурвижээ.',
+                images: pairViews('#0F766E', '#09090B', '#2DD4BF', '🐎', 'Өргөн Тал (Гванъя)', 'И Юк-са • Эрх чөлөөний дуулал')
+              },
+              {
+                id: 'poe-5',
+                title: '5. "Чиний Чимээгүй Байдал" (님의 침묵)',
+                subtitle: 'Яруу найрагч: Хан Ён-үн (1926 он)',
+                meta: [
+                  { label: 'Яруу найрагч', value: 'Хан Ён-үн (Манхэ, 1879–1944)' },
+                  { label: 'Нийтэлсэн он', value: '1926 он' },
+                  { label: 'Утга', value: 'Хагацал бол шинэ учралын эхлэл' },
+                  { label: 'Гүн ухаан', value: 'Хайр ба эх орны мөнхийн итгэл' }
+                ],
+                description: '“Хайрт минь одлоо. Аяа, хайрт минь одлоо.\nНогоон уулын гэрлийг хагаслан ургасан агч модны ойг чиглэн одлоо...\nБид уулзахдаа хагацахаас айдаг шиг,\nХагацахдаа ч эргэн уулзана гэдэгт итгэдэг...”',
+                extraTitle: '✍️ Яруу найрагчийн тухай',
+                extraText: 'Хан Ён-үн нь Буддын гүн ухаантан, яруу найрагч бөгөөд энэхүү шүлгээрээ Солонгосын орчин үеийн яруу найргийн суурийг тавьсан.',
+                images: pairViews('#451A03', '#09090B', '#FBBF24', '📜', 'Чиний Чимээгүй Байдал', 'Хан Ён-үн (1926)')
+              }
+            ]
+          }
+        ]
+      },
+
+      // -----------------------------------------------------------------------
+      // 4. ТЕХНОЛОГИЙН ТАНХИМ
+      // -----------------------------------------------------------------------
+      tech: {
+        id: 'tech',
+        number: '4',
+        icon: '🤖',
+        name: 'Технологийн танхим',
+        bgClass: 'bg-tech',
+        accent: '#06B6D4',
+        borderClass: 'border-cyan-500/35 hover:border-cyan-400',
+        shortDesc: 'Технологийн үүсэл хөгжил болон топ 5 робот, технологийн агуу бүтээлүүд.',
+        description: 'Хамгийн эхэнд технологийн үүсэл хөгжлийн түүхэн замнал, түүний доор топ 5 робот болон технологийн агуу бүтээлүүд байрлана.',
+        directToSubmenu: true,
+        submenus: [
+          {
+            id: 'tech-main',
+            number: '1',
+            icon: '🤖',
+            label: 'Технологийн үүсэл хөгжил & Топ 5 робот, бүтээл',
+            portalDesc: 'Технологийн үүсэл хөгжил болон топ 5 робот, технологийн агуу бүтээлүүд.',
+            countText: 'Үүсэл хөгжил + Топ 5 робот',
+            type: 'tech-layout',
+            timeline: [
+              { year: '1377 он', title: 'Жикжи Металл Бар', desc: 'Гутенбергээс 78 жилийн өмнө хөдөлгөөнт металл үсгээр ном хэвлэв.' },
+              { year: '1434 он', title: 'Чагённү Усан Цаг', desc: 'Чан Ён Шиль эрдэмтэн өөрөө цаг зарладаг автомат усан цаг бүтээв.' },
+              { year: '1980-аад он', title: 'Хагас Дамжуулагч', desc: 'Санах ойн чип (DRAM) үйлдвэрлэлээр дэлхийн технологийн төв болов.' },
+              { year: '2019 он', title: 'Дэлхийн Анхны 5G', desc: 'Хэт хурдны 5G сүлжээг дэлхийд анх удаа арилжаанд нэвтрүүлэв.' },
+              { year: '2026 он', title: 'AI ба Хүн Дүрст Робот', desc: 'Бие даан сэтгэж ажилладаг ухаалаг робот, нейро-чипний эрин.' }
+            ],
+            items: [
+              {
+                id: 'rob-1',
+                title: '1. HUBO (Хюбо) — Хүн Дүрст Ухаалаг Робот',
+                subtitle: 'KAIST Шинжлэх Ухааны Их Сургууль • Проф. О Жүн-хо',
+                meta: [
+                  { label: 'Хэн зохион бүтээсэн', value: 'KAIST (Профессор О Жүн-хогийн баг)' },
+                  { label: 'Ямар зориулалттай', value: 'Гамшгийн аврах ажиллагаа, хүний туслах' },
+                  { label: 'Хэрхэн ажилладаг', value: '41 үе мөчний мотор, LiDAR лазер мэдрэгч, AI тэнцвэр' },
+                  { label: 'Амжилт', value: 'Дэлхийн DARPA Роботын Олимпын аварга' }
+                ],
+                description: 'Хоёр хөл дээрээ тэнцвэртэй алхаж, шатаар өгсөх, машин жолоодох, хаалга нээх, өрөм ашиглан хана цоолох чадвартай дэвшилтэт хүн дүрст робот.',
+                extraTitle: '⚙️ Ажиллах зарчим',
+                extraText: 'Толгойд нь байрлах стерео камер болон лазер сканнер орчныг 3D хэлбэрээр зурж, хөлийн улны хүч мэдрэгч секундэд 1,000 удаа тэнцвэрийг тооцоолдог.',
+                images: pairViews('#083344', '#09090B', '#06B6D4', '🤖', 'HUBO Хүн Дүрст Робот', 'KAIST • Аврагч робот')
+              },
+              {
+                id: 'rob-2',
+                title: '2. SPOT Робот Нохой (Hyundai — Boston Dynamics)',
+                subtitle: 'Үйлдвэрийн хяналт ба аюулгүй байдлын робот',
+                meta: [
+                  { label: 'Хэн зохион бүтээсэн', value: 'Hyundai Motor Group & Boston Dynamics' },
+                  { label: 'Ямар зориулалттай', value: 'Аюултай бүс, үйлдвэр, барилгын хяналт' },
+                  { label: 'Хэрхэн ажилладаг', value: '4 хөлт динамик тэнцвэр + 360° дулааны камер' },
+                  { label: 'Чадамж', value: '14 кг ачаа тээвэрлэж, бартаат замаар явна' }
+                ],
+                description: 'Хүн ороход аюултай химийн үйлдвэр, цацраг идэвхт бүс, барилгын талбайд бие даан эргүүл хийж, хийн алдагдал болон эвдрэлийг илрүүлдэг робот нохой.',
+                extraTitle: '⚙️ Ажиллах зарчим',
+                extraText: 'Дөрвөн хөл тус бүрийн гидравлик-цахилгаан хөдөлгүүр нь шат, мөс, чулуурхаг зам дээр хальтирсан ч унахгүйгээр шууд тэнцвэрээ олдог.',
+                images: pairViews('#78350F', '#09090B', '#FBBF24', '🐕', 'SPOT Ухаалаг Робот Нохой', 'Hyundai Robotics')
+              },
+              {
+                id: 'rob-3',
+                title: '3. Ballie (Бэлли) — Хиймэл Оюунт Гэрийн Робот',
+                subtitle: 'Samsung Electronics • Ухаалаг туслах робот',
+                meta: [
+                  { label: 'Хэн зохион бүтээсэн', value: 'Samsung Electronics' },
+                  { label: 'Ямар зориулалттай', value: 'Гэр бүлийн гишүүд, тэжээвэр амьтан асрах' },
+                  { label: 'Хэрхэн ажилладаг', value: 'Дуу хоолой таних AI + суурилуулсан проектор' },
+                  { label: 'Онцлог', value: 'Шал, ханан дээр дэлгэц тусгаж харилцана' }
+                ],
+                description: 'Бөмбөг хэлбэртэй хөдөлгөөнт ухаалаг робот. Гэрийн эзнийг дагаж яван гэрэл, зурагт, агааржуулагчийг удирдаж, гэрт ганцаар үлдсэн амьтдыг харж хамгаална.',
+                extraTitle: '⚙️ Ажиллах зарчим',
+                extraText: 'Өрөөний бүтцийг санах ойдоо хадгалж, хэрэглэгчийн зуршлыг суралцан шаардлагатай мэдээллийг ханан дээр проектороор тусгадаг.',
+                images: pairViews('#1E3A8A', '#09090B', '#38BDF8', '🟡', 'Ballie Гэрийн AI Робот', 'Samsung Electronics')
+              },
+              {
+                id: 'rob-4',
+                title: '4. HBM3E Хиймэл Оюуны Санах Ойн Супер Чип',
+                subtitle: 'SK Hynix & Samsung • Дэлхийн AI-ийн зүрх',
+                meta: [
+                  { label: 'Хэн зохион бүтээсэн', value: 'Солонгосын хагас дамжуулагч инженерүүд' },
+                  { label: 'Ямар зориулалттай', value: 'Хиймэл оюун ухаан (AI) ба супер компьютер' },
+                  { label: 'Хэрхэн ажилладаг', value: '12 давхар цахиур чипийг босоогоор холбосон (TSV)' },
+                  { label: 'Хурд', value: 'Секундэд 1.18 терабайт өгөгдөл дамжуулна' }
+                ],
+                description: 'Орчин үеийн бүх хиймэл оюуны системүүд асар их өгөгдлийг агшин зуур боловсруулахад ашигладаг өндөр зурвасын санах ойн чип.',
+                extraTitle: '⚙️ Ажиллах зарчим',
+                extraText: 'Хэдэн мянган бичил зэс сувгаар 12 давхар чипийг холбосноор цахилгаан зарцуулалтыг багасгаж хурдыг хэд дахин нэмэгдүүлдэг.',
+                images: pairViews('#1E1B4B', '#09090B', '#818CF8', '💾', 'HBM3E Супер Чип', 'Хиймэл Оюуны Хөдөлгүүр')
+              },
+              {
+                id: 'rob-5',
+                title: '5. Судасны Бичил Нано-Мэс Заслын Робот',
+                subtitle: 'Чоннам Үндэсний Их Сургууль • Анагаахын робот',
+                meta: [
+                  { label: 'Хэн зохион бүтээсэн', value: 'Чоннам Их Сургуулийн Микро-Робот Хүрээлэн' },
+                  { label: 'Ямар зориулалттай', value: 'Бөглөрсөн судас нээх, хавдрын эс устгах' },
+                  { label: 'Хэрхэн ажилладаг', value: 'Гаднаас соронзон орноор удирдагдах 1мм робот' },
+                  { label: 'Давуу тал', value: 'Мэс заслын зүсэлтгүйгээр судсаар зорчино' }
+                ],
+                description: 'Дэлхийд анх удаа амьд биеийн судсан дотуур хөдөлж бөглөрлийг цэвэрлэх чадвартай 1 миллиметрийн хэмжээтэй бичил робот.',
+                extraTitle: '⚙️ Ажиллах зарчим',
+                extraText: 'Биеийн гадна байрлах цахилгаан соронзон ороомог соронзон орон үүсгэж, роботыг яг хэрэгтэй цэг рүү чиглүүлэн эргүүлдэг.',
+                images: pairViews('#064E3B', '#09090B', '#22D3EE', '🔬', 'Бичил Нано Робот', 'Анагаах ухааны дэвшил')
+              }
+            ]
+          }
+        ]
+      },
+
+      // -----------------------------------------------------------------------
+      // 5. ОДОН ОРНЫ ТАНХИМ (ГҮН САНСРЫН ОНЦГОЙ ТАНХИМ)
+      // -----------------------------------------------------------------------
+      astronomy: {
+        id: 'astronomy',
+        number: '5',
+        icon: '🌌',
+        name: 'Одон орны танхим',
+        bgClass: 'bg-astronomy',
+        accent: '#818CF8',
+        borderClass: 'border-indigo-500/40 hover:border-indigo-400',
+        shortDesc: '1. Оддын нууц (Одод & Өөрийн ордны од) • 2. Нарны аймаг • 3. Пуужин / Сансрын хөлөг.',
+        description: 'Шөнийн тэнгэрийн мянга мянган оддын нууц, Нарны аймгийн гарагууд болон сансрын пуужингуудын 3 тусдаа өрөө рүү орж аялна уу.',
+        submenus: [
+          {
+            id: 'ast-stars-secret',
+            number: '1',
+            icon: '✨',
+            label: '1. Оддын нууц',
+            portalDesc: 'Дотор нь "1. Одод (Долоон бурхан зэрэг 10 од)" болон "2. Өөрийн ордны од (12 орд)" гэсэн 2 тусдаа өрөө бий.',
+            countText: '2 дэд өрөө • 10 од + 12 орд',
+            type: 'stars-secret-portal',
+            stars10: [
+              {
+                id: 'star-1',
+                title: '1. Долоон Бурхан Од (Их Баавгайн Орд)',
+                subtitle: 'Дэлхийгээс 78 – 124 гэрлийн жил',
+                meta: [
+                  { label: 'Оддын тоо', value: '7 тод од (Дубхе, Мерак, Фекда, Мегрец, Алиот, Мицар, Алкаид)' },
+                  { label: 'Зай', value: '78 – 124 гэрлийн жил' },
+                  { label: 'Ач холбогдол', value: 'Алтан гадас одыг олох гол хөтөч' },
+                  { label: 'Соёл', value: 'Монгол, Солонгосчуудын шүтээн од' }
+                ],
+                description: 'Хойд тэнгэрт шанага хэлбэрээр тод гялалзах 7 од. Эрт дээр үеэс нүүдэлчид болон одон орончид шөнийн цаг, улирал, зүг чигийг Долоон бурхан одоор тодорхойлж ирсэн.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Шанаганы амсар дээрх хоёр одыг (Дубхе, Мерак) хооронд нь холбож 5 дахин сунгахад яг Алтан гадас од дээр очдог.',
+                images: pairViews('#1E1B4B', '#020617', '#818CF8', '🌌', 'Долоон Бурхан Од', 'Хойд тэнгэрийн хөтөч')
+              },
+              {
+                id: 'star-2',
+                title: '2. Алтан Гадас Од (Polaris / Пүкгыксон)',
+                subtitle: 'Дэлхийгээс 433 гэрлийн жил',
+                meta: [
+                  { label: 'Орд', value: 'Бага Баавгайн ордны үзүүр' },
+                  { label: 'Зай', value: '433 гэрлийн жил' },
+                  { label: 'Гэрэлтэлт', value: 'Манай Нарнаас 2,500 дахин хурц' },
+                  { label: 'Учир', value: 'Хойд зүгийг заагч хөдөлгөөнгүй од' }
+                ],
+                description: 'Дэлхийн эргэлтийн хойд тэнхлэгийн яг харалдаа орших тул шөнийн турш бусад одод түүнийг тойрон эргэх мэт харагдавч Алтан гадас ганцаараа байрандаа зогсож байдаг.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Цөл, далай, тал нутагт төөрсөн аянчдын амийг авардаг "Тэнгэрийн луужин" хэмээн нэрлэгддэг.',
+                images: pairViews('#172554', '#020617', '#60A5FA', '⭐', 'Алтан Гадас Од', '433 гэрлийн жил')
+              },
+              {
+                id: 'star-3',
+                title: '3. Сириус (Нохойн Од — Хамгийн Хурц Од)',
+                subtitle: 'Дэлхийгээс 8.6 гэрлийн жил',
+                meta: [
+                  { label: 'Орд', value: 'Их Нохойн орд (Canis Major)' },
+                  { label: 'Зай', value: '8.6 гэрлийн жил (Хамгийн ойрын тод од)' },
+                  { label: 'Өнгө', value: 'Хурц цагаан-цэнхэр' },
+                  { label: 'Гэрэлтэлт', value: 'Нарнаас 25 дахин тод' }
+                ],
+                description: 'Шөнийн тэнгэрт харагдах бүх оддоос хамгийн хурц гялалздаг од. Өвлийн шөнө тэнгэрт яг л очир эрдэнэ мэт өнгө солонгорон анивчдаг.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Эртний Египетчүүд Сириус од үүрээр мандахыг хараад Нил мөрөн үерлэхийг урьдчилан мэддэг байжээ.',
+                images: pairViews('#0C4A6E', '#020617', '#38BDF8', '💎', 'Сириус — Тэнгэрийн Очир', '8.6 гэрлийн жил')
+              },
+              {
+                id: 'star-4',
+                title: '4. Бетельгейзе (Улаан Аварга Од)',
+                subtitle: 'Дэлхийгээс 642 гэрлийн жил • Орион орд',
+                meta: [
+                  { label: 'Хэмжээ', value: 'Манай Нарнаас 700 дахин том диаметр' },
+                  { label: 'Зай', value: '642 гэрлийн жил' },
+                  { label: 'Өнгө', value: 'Гүн улбар шар-улаан' },
+                  { label: 'Төлөв', value: 'Хэт шинэ од (Supernova) болон дэлбэрэх шатандаа' }
+                ],
+                description: 'Орионы мөрөн дээр орших аварга улаан од. Хэрэв түүнийг манай Нарны оронд тавьбал Ангараг гарагийг хүртэл залгих хэмжээний нүсэр том.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Тэрээр амьдралынхаа сүүлийн шатанд яваа тул хэзээ нэгэн цагт дэлбэрэхэд өдрийн цагаар ч тэнгэрт сар шиг тод харагдах болно.',
+                images: pairViews('#7C2D12', '#09090B', '#FB923C', '🔴', 'Бетельгейзе Аварга Од', 'Нарнаас 700 дахин том')
+              },
+              {
+                id: 'star-5',
+                title: '5. Вега (Ятганы Од / Жигнё)',
+                subtitle: 'Дэлхийгээс 25 гэрлийн жил • Долоон сарын 7-ны домог',
+                meta: [
+                  { label: 'Орд', value: 'Ятганы орд (Lyra)' },
+                  { label: 'Зай', value: '25 гэрлийн жил' },
+                  { label: 'Азийн домог', value: 'Нэхмэлчин охин (Жигнё) од' },
+                  { label: 'Хурд', value: 'Өөрийн тэнхлэгээ 12.5 цагт эргэнэ' }
+                ],
+                description: 'Зуны шөнийн тэнгэрийн хамгийн тод хөх од. Солонгосын "Чилсок" буюу 7-р сарын 7-ны хайрын домогт гардаг Нэхмэлчин охины од.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Сүүн замын нөгөө талд орших Альтаир (Үхэрчин хүү) одтой жилд ганцхан удаа 7-р сарын 7-нд шаазгайн гүүрээр уулздаг гэх үзэсгэлэнт домогтой.',
+                images: pairViews('#1E3A8A', '#09090B', '#60A5FA', '💠', 'Вега — Нэхмэлчин Од', '25 гэрлийн жил')
+              },
+              {
+                id: 'star-6',
+                title: '6. Мичид Зургаан Од (Плеядес)',
+                subtitle: 'Дэлхийгээс 444 гэрлийн жил • Үхрийн орд',
+                meta: [
+                  { label: 'Төрөл', value: 'Залуу халуун хөх оддын бөөгнөрөл' },
+                  { label: 'Зай', value: '444 гэрлийн жил' },
+                  { label: 'Нас', value: '100 сая жил (Оддын хувьд маш залуу)' },
+                  { label: 'Учир', value: 'Цаг агаар, өвлийн эхлэлийг шинжих од' }
+                ],
+                description: 'Нэг дор бөөгнөрч гялалзах жижигхэн хөх одод. Монголчууд Мичид од сартай тохиох өдрөөр өвлийн хүйтэн, хаврын дулааныг шинждэг.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Энгийн нүдээр 6–7 од харагдах боловч сансрын дурангаар 1,000 гаруй гэрэлт одод цэнхэр манан дунд оршино.',
+                images: pairViews('#312E81', '#09090B', '#A5B4FC', '✨', 'Мичид Зургаан Од', 'Оддын бөөгнөрөл')
+              },
+              {
+                id: 'star-7',
+                title: '7. Антарес (Хилэнцийн Зүрх)',
+                subtitle: 'Дэлхийгээс 550 гэрлийн жил',
+                meta: [
+                  { label: 'Орд', value: 'Хилэнцийн ордны яг төв' },
+                  { label: 'Зай', value: '550 гэрлийн жил' },
+                  { label: 'Нэрний утга', value: '"Арес (Ангараг гараг)-ийн өрсөлдөгч"' },
+                  { label: 'Гэрэлтэлт', value: 'Нарнаас 10,000 дахин хурц' }
+                ],
+                description: 'Зуны шөнө өмнөд тэнгэрт улаан зүрх мэт лугшин гялалздаг аварга од. Өнгөөрөө Ангараг гарагтай андуурагдахуйц тод улаан.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Эртний Солонгосчууд энэ одыг "Дорнын Хөх Луугийн зүрх" хэмээн нэрлэдэг байв.',
+                images: pairViews('#881337', '#09090B', '#F43F5E', '❤️', 'Антарес — Хилэнцийн Зүрх', '550 гэрлийн жил')
+              },
+              {
+                id: 'star-8',
+                title: '8. Альдебаран (Бухын Улаан Нүд)',
+                subtitle: 'Дэлхийгээс 65 гэрлийн жил • Үхрийн орд',
+                meta: [
+                  { label: 'Орд', value: 'Үхрийн ордны хамгийн тод од' },
+                  { label: 'Зай', value: '65 гэрлийн жил' },
+                  { label: 'Хэмжээ', value: 'Нарнаас 44 дахин том' },
+                  { label: 'Сонирхолтой', value: 'Pioneer 10 сансрын хөлөг түүн рүү чиглэж яваа' }
+                ],
+                description: 'Үхрийн ордны "V" хэлбэрийн нүүрэн дээр гал улаан нүд мэт гялалзах улбар шар аварга од.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Хүн төрөлхтний илгээсэн Pioneer 10 сансрын хөлөг 2 сая жилийн дараа Альдебаран одны дэргэдүүр өнгөрнө.',
+                images: pairViews('#78350F', '#09090B', '#FBBF24', '🐂', 'Альдебаран Од', '65 гэрлийн жил')
+              },
+              {
+                id: 'star-9',
+                title: '9. Ригель (Орионы Хөх Хөл)',
+                subtitle: 'Дэлхийгээс 860 гэрлийн жил',
+                meta: [
+                  { label: 'Төрөл', value: 'Хөх супер аварга од' },
+                  { label: 'Зай', value: '860 гэрлийн жил' },
+                  { label: 'Температур', value: '12,100°C (Нарнаас 2 дахин халуун)' },
+                  { label: 'Гэрэлтэлт', value: 'Нарнаас 120,000 дахин хурц' }
+                ],
+                description: 'Орионы баруун доод хөл дээр орших асар хүчирхэг хөх од. Хэт халуун тул цагаан-цэнхэр хурц туяа цацруулдаг.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: '860 гэрлийн жилийн алсад орших хэдий ч Нарнаас 120,000 дахин тод тул дэлхийгээс хамгийн тод харагддаг.',
+                images: pairViews('#0C4A6E', '#09090B', '#22D3EE', '💠', 'Ригель Хөх Аварга', 'Нарнаас 120,000 дахин хурц')
+              },
+              {
+                id: 'star-10',
+                title: '10. Проксима Центавра (Нартай Хамгийн Ойр Од)',
+                subtitle: 'Дэлхийгээс ердөө 4.24 гэрлийн жил',
+                meta: [
+                  { label: 'Зай', value: '4.24 гэрлийн жил (40 их наяд км)' },
+                  { label: 'Орд', value: 'Кентаврын орд' },
+                  { label: 'Гараг', value: 'Амьдрал байх боломжтой Proxima b гарагтай' },
+                  { label: 'Төрөл', value: 'Улаан одой од' }
+                ],
+                description: 'Манай Нарны аймгаас гараад хүрэх хамгийн эхний хөрш од. Түүнийг тойрон Дэлхийтэй төстэй чулуурхаг гараг эргэлддэг.',
+                extraTitle: '✨ Ямар учиртай вэ?',
+                extraText: 'Гэрлийн хурдаар нисвэл 4 жил 3 сарын дараа хүрэх бидний сансрын хамгийн ойрын хөрш.',
+                images: pairViews('#4C1D95', '#09090B', '#C084FC', '🪐', 'Проксима Центавра', '4.24 гэрлийн жил • Хамгийн ойр од')
+              }
+            ],
+            zodiac12: [
+              { sign: '♈ Хонь', dates: '3/21 – 4/19', mainStar: 'Хамаль (Hamal)', dist: '66 гэрлийн жил', desc: 'Хаврын тэгшитгэлийг эхлүүлэгч эрч хүчтэй орд. Гол од Хамаль нь улбар шар аварга од бөгөөд зориг, шинэ эхлэлийг бэлгэднэ.' },
+              { sign: '♉ Үхэр', dates: '4/20 – 5/20', mainStar: 'Альдебаран (Aldebaran)', dist: '65 гэрлийн жил', desc: 'Тогтвортой, тэвчээртэй орд. Ордны зүрхэнд гал улаан Альдебаран од болон Мичид оддын бөөгнөрөл гялалзана.' },
+              { sign: '♊ Ихэр', dates: '5/21 – 6/21', mainStar: 'Поллукс ба Кастор', dist: '34 – 51 гэрлийн жил', desc: 'Хоёр ихэр баатрыг дүрсэлсэн орд. Поллукс (алтлаг) болон Кастор (цагаан) хоёр од зэрэгцэн оршиж оюун ухаан, харилцааг илтгэнэ.' },
+              { sign: '♋ Мэлхий', dates: '6/22 – 7/22', mainStar: 'Акубенс ба Зөгийн Үүр (M44)', dist: '174 гэрлийн жил', desc: 'Зөөлөн сэтгэл, гэр бүлээ хамгаалах орд. Төв хэсэгт нь олон зуун од бөөгнөрсөн "Зөгийн үүр" оддын мананцар оршдог.' },
+              { sign: '♌ Арслан', dates: '7/23 – 8/22', mainStar: 'Регул (Regulus — Хаан Од)', dist: '79 гэрлийн жил', desc: 'Асуултын тэмдэг мэт хэлбэртэй сүрлэг орд. Гол од Регул нь "Бяцхан хаан" гэсэн утгатай хурц хөх од юм.' },
+              { sign: '♍ Охин', dates: '8/23 – 9/22', mainStar: 'Спика (Spica — Тариан Түрүү)', dist: '250 гэрлийн жил', desc: 'Нарийн мэдрэмж, цэвэр ариун байдлын орд. Спика од нь манай Нарнаас 12,000 дахин хурц гэрэлтдэг хос од юм.' },
+              { sign: '♎ Жинлүүр', dates: '9/23 – 10/22', mainStar: 'Зубенэсхамали', dist: '185 гэрлийн жил', desc: 'Тэнцвэр, шударга ёс, гоо сайхны бэлгэдэл. Оддын дундаас ховор тохиолддог цайвар ногоон туяатай одтой орд.' },
+              { sign: '♏ Хилэнц', dates: '10/23 – 11/21', mainStar: 'Антарес (Antares)', dist: '550 гэрлийн жил', desc: 'Гүн мэдрэмж, хүч чадлын орд. Төв хэсэгт нь улаан зүрх мэт лугших аварга Антарес од оршино.' },
+              { sign: '♐ Нум', dates: '11/22 – 12/21', mainStar: 'Каус Аустралис', dist: '143 гэрлийн жил', desc: 'Эрх чөлөө, аялал, эрэл хайгуулын орд. Манай Сүүн зам галактикийн яг төв цэг Нумын ордны чиглэлд оршдог!' },
+              { sign: '♑ Матар', dates: '12/22 – 1/19', mainStar: 'Денеб Альгеди', dist: '39 гэрлийн жил', desc: 'Тууштай зорилго, тэсвэр хатуужлын орд. Өвлийн шөнийн тэнгэрт гурвалжин хэлбэрээр тод харагддаг.' },
+              { sign: '♒ Хумх', dates: '1/20 – 2/18', mainStar: 'Садальсууд (Аз Жаргалын Од)', dist: '540 гэрлийн жил', desc: 'Шинэ санаа, ирээдүй, хүн төрөлхтний орд. Гол од Садальсууд нь "Аз жаргалуудын хамгийн агуу нь" гэсэн утгатай.' },
+              { sign: '♓ Загас', dates: '2/19 – 3/20', mainStar: 'Альриша (Холбоос Од)', dist: '139 гэрлийн жил', desc: 'Уран сэтгэмж, зөн совингийн орд. Хоёр загасыг гэрэлт утсаар холбосон мэт хэлбэртэй бөгөөд Альриша од тэднийг зангиддаг.' }
+            ]
+          },
+          {
+            id: 'ast-solar',
+            number: '2',
+            icon: '🪐',
+            label: '2. Нарны аймаг',
+            portalDesc: 'Нарны аймгийн 8 гараг дээр дарж нарнаас хэр хол зайтай, бүх үзүүлэлтүүд болон бүтэн, ойртуулсан зургийг үзнэ үү.',
+            countText: '8 гараг • Бүтэн ба ойртуулсан зураг',
+            type: 'solar',
+            items: [
+              {
+                id: 'pl-1',
+                title: '1. Буд Гараг (Mercury)',
+                subtitle: 'Нарнаас 57.9 сая км • Хамгийн жижиг, хурдан гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '57.9 сая км (0.39 AU)' },
+                  { label: 'Диаметр', value: '4,879 км' },
+                  { label: 'Нэг жил (Нар тойрох)', value: '88 хоног' },
+                  { label: 'Гадаргуугийн хэм', value: '+430°C (өдөр) / -180°C (шөнө)' }
+                ],
+                description: 'Нартай хамгийн ойр орших чулуурхаг гараг. Агаар мандал бараг байхгүй тул солирын тогоогоор дүүрэн, Сартай төстэй гадаргуутай.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Буд гараг дээр 1 өдөр (Нар мандахаас дараагийн нар мандах хүртэл) Дэлхийн 176 хоногтой тэнцдэг.',
+                images: makePlanetImages('Буд Гараг (Mercury)', '#D4D4D8', '#52525B', '#71717A', false, 'Нарнаас 57.9 сая км • 88 хоногт нарыг тойрно')
+              },
+              {
+                id: 'pl-2',
+                title: '2. Сугар Гараг (Venus — Үдшийн Гялаан)',
+                subtitle: 'Нарнаас 108.2 сая км • Хамгийн халуун гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '108.2 сая км (0.72 AU)' },
+                  { label: 'Диаметр', value: '12,104 км (Дэлхийтэй ойролцоо)' },
+                  { label: 'Гадаргуугийн хэм', value: '+465°C (Хүлэмжийн хийн улмаас)' },
+                  { label: 'Эргэлтийн чиглэл', value: 'Бусад гарагаас эсрэг зүгт эргэнэ' }
+                ],
+                description: 'Өтгөн хүхрийн хүчлийн үүлээр бүрхэгдсэн тул нарны гэрлийг хүчтэй ойлгож, дэлхийгээс сарны дараа орох хамгийн тод биет болон харагддаг.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Сугар гараг дээр Нар баруун зүгээс мандаж, зүүн зүгт жаргадаг!',
+                images: makePlanetImages('Сугар Гараг (Venus)', '#FDE68A', '#D97706', '#78350F', false, 'Нарнаас 108.2 сая км • +465°C халуун')
+              },
+              {
+                id: 'pl-3',
+                title: '3. Дэлхий Гараг (Earth — Цэнхэр Сувд)',
+                subtitle: 'Нарнаас 149.6 сая км • Амьдрал оршигч цорын ганц гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '149.6 сая км (1.00 AU)' },
+                  { label: 'Диаметр', value: '12,742 км' },
+                  { label: 'Дагуул', value: '1 (Сар — 384,400 км зайтай)' },
+                  { label: 'Гадаргуу', value: '71% шингэн ус, 29% хуурай газар' }
+                ],
+                description: 'Шингэн ус, хүчилтөрөгчөөр баялаг агаар мандал, соронзон хамгаалалт бүхий бидний цорын ганц эх гэр.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Нарнаас ирсэн гэрэл Дэлхийд ердөө 8 минут 20 секундийн дотор ирдэг.',
+                images: makePlanetImages('Дэлхий Гараг (Earth)', '#38BDF8', '#10B981', '#1D4ED8', false, 'Нарнаас 149.6 сая км • Амьдралын өлгий')
+              },
+              {
+                id: 'pl-4',
+                title: '4. Ангараг Гараг (Mars — Улаан Гараг)',
+                subtitle: 'Нарнаас 227.9 сая км • Олимп аварга галт уул',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '227.9 сая км (1.52 AU)' },
+                  { label: 'Диаметр', value: '6,779 км (Дэлхийн тал)' },
+                  { label: 'Дагуул', value: '2 (Фобос ба Деймос)' },
+                  { label: 'Хамгийн өндөр уул', value: 'Олимп уул (21.9 км өндөр)' }
+                ],
+                description: 'Хөрсөндөө төмрийн исэл (зэв) ихээр агуулдаг тул улаан өнгөтэй харагддаг. Эрт цагт голын урсгал, нуурууд байсан ул мөртэй.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Ангараг гарагийн Олимп галт уул нь Дэлхийн Эверест уулнаас 2.5 дахин өндөр юм.',
+                images: makePlanetImages('Ангараг Гараг (Mars)', '#FB7185', '#B91C1C', '#450A0A', false, 'Нарнаас 227.9 сая км • Улаан гараг')
+              },
+              {
+                id: 'pl-5',
+                title: '5. Бархасбадь Гараг (Jupiter — Гарагуудын Хаан)',
+                subtitle: 'Нарнаас 778.5 сая км • Хамгийн аварга хийн гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '778.5 сая км (5.20 AU)' },
+                  { label: 'Диаметр', value: '139,820 км (1,300 Дэлхий багтана)' },
+                  { label: 'Дагуул', value: '95 дагуул (Европа, Ганимед, Ио)' },
+                  { label: 'Онцлог', value: 'Их Улаан Толбо (350 жилийн шуурга)' }
+                ],
+                description: 'Нарны аймгийн бусад бүх гарагийг нийлүүлснээс ч 2.5 дахин хүнд аварга хийн гараг. Асар хүчтэй татах хүчээрээ сүүлт оддыг өөртөө татаж Дэлхийг хамгаалдаг.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Бархасбадийн "Их Улаан Толбо" нь дотроо 2–3 Дэлхийг багтаах хэмжээний аварга хар салхи юм.',
+                images: makePlanetImages('Бархасбадь (Jupiter)', '#FED7AA', '#C2410C', '#7C2D12', false, 'Нарнаас 778.5 сая км • Хамгийн том гараг')
+              },
+              {
+                id: 'pl-6',
+                title: '6. Санчир Гараг (Saturn — Бөгжт Гайхамшиг)',
+                subtitle: 'Нарнаас 1.43 тэрбум км • Мөсөн цагирагт гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '1.43 тэрбум км (9.58 AU)' },
+                  { label: 'Диаметр', value: '116,460 км' },
+                  { label: 'Бөгжний өргөн', value: '282,000 км (мөс, чулууны хэлтэрхий)' },
+                  { label: 'Дагуул', value: '146 дагуул (Титан, Энцелад)' }
+                ],
+                description: 'Тэрбум тэрбум гялалзсан мөсөн бөөмсөөс тогтох аварга цагиргаараа Нарны аймгийн хамгийн үзэсгэлэнт гараг.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Санчир гарагийн нягт уснаас ч бага тул аварга далайд тавьбал хөвөх болно!',
+                images: makePlanetImages('Санчир Гараг (Saturn)', '#FEF08A', '#CA8A04', '#FDE047', true, 'Нарнаас 1.43 тэрбум км • Мөсөн цагирагт')
+              },
+              {
+                id: 'pl-7',
+                title: '7. Тэнгэрийн Ван Гараг (Uranus — Мөсөн Аварга)',
+                subtitle: 'Нарнаас 2.87 тэрбум км • Хажуугаараа эргэгч гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '2.87 тэрбум км (19.2 AU)' },
+                  { label: 'Диаметр', value: '50,724 км' },
+                  { label: 'Хамгийн хүйтэн хэм', value: '-224°C' },
+                  { label: 'Онцлог', value: '98 хэмийн налуутай, бөмбөг шиг өнхөрч эргэнэ' }
+                ],
+                description: 'Агаар мандал дахь метан хийн улмаас зөөлөн оюу цэнхэр өнгөтэй харагддаг мөсөн аварга гараг.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: 'Тэнхлэг нь 98 хэм хазайсан тул нэг туйл дээр нь 42 жил тасралтгүй өдөр, дараа нь 42 жил шөнө болдог.',
+                images: makePlanetImages('Тэнгэрийн Ван (Uranus)', '#A5F3FC', '#0891B2', '#164E63', true, 'Нарнаас 2.87 тэрбум км • -224°C хүйтэн')
+              },
+              {
+                id: 'pl-8',
+                title: '8. Далай Ван Гараг (Neptune — Хөх Шуурга)',
+                subtitle: 'Нарнаас 4.50 тэрбум км • Хамгийн алс холын гараг',
+                meta: [
+                  { label: 'Нарнаас хэр хол', value: '4.50 тэрбум км (30.1 AU)' },
+                  { label: 'Нэг жил (Нар тойрох)', value: '165 Дэлхийн жил' },
+                  { label: 'Салхины хурд', value: '2,100 км/цаг (Дуунаас хурдан)' },
+                  { label: 'Дагуул', value: '16 дагуул (Тритон)' }
+                ],
+                description: 'Нарнаас хамгийн алс орших гүн хөх өнгөтэй мөсөн аварга гараг. Тэнд Нарны аймгийн хамгийн хүчтэй хар салхи шуурдаг.',
+                extraTitle: '🪐 Сансрын баримт',
+                extraText: '1846 онд дурангаар харахаасаа өмнө математикийн тооцооллоор оршин байгааг нь урьдчилан нээсэн цорын ганц гараг.',
+                images: makePlanetImages('Далай Ван (Neptune)', '#60A5FA', '#1D4ED8', '#1E1B4B', false, 'Нарнаас 4.50 тэрбум км • 2,100 км/ц салхи')
+              }
+            ]
+          },
+          {
+            id: 'ast-rockets',
+            number: '3',
+            icon: '🚀',
+            label: '3. Пуужин / Сансрын хөлөг',
+            portalDesc: 'Топ 5 сансрын пуужин, сарны хөлөг, хиймэл дагуулын хэзээ хөөрсөн, хэн бүтээсэн бүх мэдээлэл.',
+            countText: 'Топ 5 пуужин & хиймэл дагуул',
+            type: 'grid',
+            items: [
+              {
+                id: 'roc-1',
+                title: '1. Нури (Nuri / KSLV-II) Сансрын Пуужин',
+                subtitle: '2023 оны 5-р сарын 25 • 100% Солонгос технологи',
+                meta: [
+                  { label: 'Хэзээ хөөрсөн', value: '2023 оны 5-р сарын 25 (3 дахь хөөргөлт амжилттай)' },
+                  { label: 'Хэн зохион бүтээсэн', value: 'Солонгосын Сансар Судлалын Хүрээлэн (KARI)' },
+                  { label: 'Өндөр ба Жин', value: '47.2 метр өндөр, 200 тонн жинтэй' },
+                  { label: 'Хөдөлгүүр', value: '75 тоннын 4 шингэн түлшний хөдөлгүүр' }
+                ],
+                description: 'Өмнөд Солонгос өөрийн эрдэмтдийн оюун ухаанаар бүтээсэн 3 шатлалт сансрын зөөгч пуужин. 8 хиймэл дагуулыг 550 км өндрийн тойрог замд амжилттай оруулсан.',
+                extraTitle: '🚀 Түүхэн амжилт',
+                extraText: 'Нури хөөрснөөр Өмнөд Солонгос 1 тонноос дээш жинтэй хиймэл дагуулыг сансарт бие даан хөөргөх чадвартай дэлхийн 7 дахь гүрэн болсон.',
+                images: pairViews('#0C4A6E', '#09090B', '#38BDF8', '🚀', 'Нури (KSLV-II) Пуужин', 'KARI • 2023 онд сансарт хөөрсөн')
+              },
+              {
+                id: 'roc-2',
+                title: '2. Данури (Danuri / KPLO) Сарны Сансрын Хөлөг',
+                subtitle: '2022 оны 8-р сарын 5 • Солонгосын анхны сарны хөлөг',
+                meta: [
+                  { label: 'Хэзээ хөөрсөн', value: '2022 оны 8-р сарын 5 (12-р сард Сарны тойрогт орсон)' },
+                  { label: 'Хэн зохион бүтээсэн', value: 'KARI болон Солонгосын 6 их сургууль' },
+                  { label: 'Жин', value: '678 кг' },
+                  { label: 'Даалгавар', value: 'Сарны туйлын сүүдэртэй бүс, усны мөс судлах' }
+                ],
+                description: 'Сарны гадаргуугаас 100 км өндөрт тойрон нисэж, ирээдүйд сансрын нисгэгчид газардах талбайг өндөр нарийвчлалтай зураглаж буй сансрын хөлөг.',
+                extraTitle: '🛰️ Гайхамшигт зураг',
+                extraText: 'Данури хөлөг Сарны тойрог замаас Сарны гадаргуу болон алсад харагдах Дэлхийг хамтад нь буулгасан гайхалтай зургийг илгээсэн.',
+                images: pairViews('#1E293B', '#09090B', '#E2E8F0', '🛰️', 'Данури Сарны Хөлөг', '2022 он • Сарны судлаач')
+              },
+              {
+                id: 'roc-3',
+                title: '3. Ариран-5 (KOMPSAT-5) Радар Хиймэл Дагуул',
+                subtitle: '2013 оны 8-р сарын 22 • Бүх цаг агаарын ажиглагч',
+                meta: [
+                  { label: 'Хэзээ хөөрсөн', value: '2013 оны 8-р сарын 22' },
+                  { label: 'Хэн зохион бүтээсэн', value: 'KARI (Солонгосын Сансар Судлалын Хүрээлэн)' },
+                  { label: 'Технологи', value: 'SAR (Синтетик апертурын радар)' },
+                  { label: 'Чадамж', value: 'Өтгөн үүл, шөнийн харанхуйд ч 1м нарийвчлалтай харна' }
+                ],
+                description: 'Энгийн оптик камер үүлийг нэвтэлж харж чаддаггүй бол Ариран-5 радар долгионоор байгалийн гамшиг, далайн мөс, газар хөдлөлтийг 24 цаг хянадаг.',
+                extraTitle: '🛰️ Сансрын үүрэг',
+                extraText: 'Дэлхийг өдөрт 15 удаа тойрч байгаль орчин болон гамшгийн сэрэмжлүүлэг дамжуулдаг.',
+                images: pairViews('#1E1B4B', '#09090B', '#818CF8', '📡', 'Ариран-5 Хиймэл Дагуул', '2013 он • Радар ажиглагч')
+              },
+              {
+                id: 'roc-4',
+                title: '4. Чоллиан-2B (GEO-KOMPSAT-2B) Хиймэл Дагуул',
+                subtitle: '2020 оны 2-р сарын 18 • Дэлхийн анхны геостационар орчны дагуул',
+                meta: [
+                  { label: 'Хэзээ хөөрсөн', value: '2020 оны 2-р сарын 18' },
+                  { label: 'Хэн зохион бүтээсэн', value: 'KARI & Солонгосын Байгаль Орчны Яам' },
+                  { label: 'Өндөр', value: '35,786 км (Дэлхийтэй ижил хурдаар эргэнэ)' },
+                  { label: 'Үүрэг', value: 'Нарийн тоосонцор, агаарын бохирдол, далай судлах' }
+                ],
+                description: 'Зүүн Азийн агаарын чанар, хүхэр, азотын хий болон далайн улаан түрлэгийг сансраас бодит цаг хугацаанд хянадаг дэлхийн анхны байгаль орчны геостационар дагуул.',
+                extraTitle: '🛰️ Дэлхийд анхдагч',
+                extraText: '36,000 км өндрөөс Азийн 20 орны агаарын урсгалыг цаг тутамд зураглан дамжуулдаг.',
+                images: pairViews('#064E3B', '#09090B', '#34D399', '🌍', 'Чоллиан-2B Хиймэл Дагуул', '2020 он • Орчны ажиглагч')
+              },
+              {
+                id: 'roc-5',
+                title: '5. Наро-1 (Naro-1 / KSLV-I) Анхны Пуужин',
+                subtitle: '2013 оны 1-р сарын 30 • Сансрын эриний эхлэл',
+                meta: [
+                  { label: 'Хэзээ хөөрсөн', value: '2013 оны 1-р сарын 30' },
+                  { label: 'Хэн зохион бүтээсэн', value: 'KARI (Оросын Хруничев төвтэй хамтарсан 1-р шат)' },
+                  { label: 'Өндөр', value: '33.5 метр' },
+                  { label: 'Түүхэн ач холбогдол', value: 'Солонгосын нутгаас хөөрсөн анхны пуужин' }
+                ],
+                description: 'Наро сансрын буудлаас хөөрч "Шинжлэх ухаан-2C" хиймэл дагуулыг тойрог замд оруулснаар Өмнөд Солонгосыг "Сансрын клуб"-т элсүүлсэн түүхэн пуужин.',
+                extraTitle: '🚀 Түүхэн алхам',
+                extraText: 'Наро-1 пуужингийн туршлага дээр үндэслэн 10 жилийн дараа 100% дотоодын Нури пуужинг бүтээжээ.',
+                images: pairViews('#312E81', '#09090B', '#60A5FA', '🔥', 'Наро-1 Анхны Пуужин', '2013 он • Сансрын клубт элссэн')
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    // =========================================================================
+    // 3. STRICT MULTI-LEVEL DRILL-DOWN NAVIGATION STATE
+    // =========================================================================
+    let DATA = JSON.parse(JSON.stringify(MUSEUM_DATA));
+    let visitor = { name: 'Зочин', date: '2026-11-24' };
+
+    // Admin State (Default: false — Visitors can only view)
+    const ADMIN_PASSWORD = 'admin2026';
+    let isAdmin = false;
+    let editingTarget = null; // null = creating new exhibit, or { hallId, subIdx, itemIdx, isStarBranch }
+
+    /**
+     * Navigation Route Object:
+     * - { level: 'atrium' }
+     * - { level: 'chamber-menu', hallId: 'nature' | 'history' | 'culture' | 'astronomy' }
+     * - { level: 'room', hallId: '...', subIdx: 0 }
+     * - { level: 'stars-branch', branch: 'stars10' | 'zodiac12' }  (Level 3 inside Astronomy -> 1. Оддын нууц)
+     */
+    let currentRoute = { level: 'atrium' };
+    let selectedMapPinIndex = 0;
+    let selectedZodiacIndex = 0;
+
+    // Zoom & Pan State
+    let zoomLevel = 1;
+    let imgPanX = 0;
+    let imgPanY = 0;
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let uploadedImagesBuffer = [];
+
+    function loadPersistedData() {
+      try {
+        const fullState = localStorage.getItem('kdm_v4_full_database');
+        if (fullState) {
+          DATA = JSON.parse(fullState);
+        }
+        if (sessionStorage.getItem('kdm_admin_session') === '1') {
+          isAdmin = true;
+        }
+      } catch (e) {}
+    }
+
+    function persistDatabase() {
+      try {
+        localStorage.setItem('kdm_v4_full_database', JSON.stringify(DATA));
+      } catch (e) {
+        notify('⚠️ Хөтчийн санах ой дүүрсэн тул түр хугацаанд хадгаллаа.');
+      }
+    }
+
+    // =========================================================================
+    // 3B. ADMIN LOGIN, LOGOUT, EDIT, DELETE & RESET HANDLERS
+    // =========================================================================
+    function syncAdminUI() {
+      const loginBtn = document.getElementById('btn-admin-login');
+      const adminBar = document.getElementById('admin-control-bar');
+      const watermark = document.getElementById('visitor-watermark');
+
+      if (isAdmin) {
+        loginBtn.classList.add('hidden');
+        adminBar.classList.remove('hidden');
+        document.body.classList.remove('visitor-protected');
+        watermark.classList.add('hidden');
+        dismissSecurityShield();
+      } else {
+        loginBtn.classList.remove('hidden');
+        adminBar.classList.add('hidden');
+        document.body.classList.add('visitor-protected');
+        if (!document.getElementById('museum-workspace').classList.contains('hidden')) {
+          watermark.classList.remove('hidden');
+        }
+      }
+    }
+
+    function openAdminLoginModal() {
+      document.getElementById('admin-login-error').classList.add('hidden');
+      document.getElementById('admin-pass-input').value = '';
+      const m = document.getElementById('admin-login-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      setTimeout(() => document.getElementById('admin-pass-input').focus(), 100);
+    }
+
+    function closeAdminLoginModal() {
+      const m = document.getElementById('admin-login-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function submitAdminLogin(e) {
+      e.preventDefault();
+      const val = document.getElementById('admin-pass-input').value.trim();
+      if (val === ADMIN_PASSWORD) {
+        isAdmin = true;
+        sessionStorage.setItem('kdm_admin_session', '1');
+        closeAdminLoginModal();
+        syncAdminUI();
+        renderWorkspace();
+        notify('🔐 Админ эрхээр амжилттай нэвтэрлээ!');
+      } else {
+        document.getElementById('admin-login-error').classList.remove('hidden');
+      }
+    }
+
+    function logoutAdmin() {
+      isAdmin = false;
+      sessionStorage.removeItem('kdm_admin_session');
+      syncAdminUI();
+      renderWorkspace();
+      notify('Зочны хамгаалалттай горим руу шилжлээ.');
+    }
+
+    let pendingConfirmCallback = null;
+
+    function openConfirmModal(title, message, okLabel, onConfirm) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-message').textContent = message;
+      const okBtn = document.getElementById('confirm-ok-btn');
+      okBtn.textContent = okLabel || 'Тийм';
+      pendingConfirmCallback = onConfirm;
+      okBtn.onclick = () => {
+        const cb = pendingConfirmCallback;
+        closeConfirmModal();
+        if (typeof cb === 'function') cb();
+      };
+      const m = document.getElementById('confirm-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeConfirmModal() {
+      pendingConfirmCallback = null;
+      const m = document.getElementById('confirm-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function deleteExhibit(event, hallId, subIdx, itemIdx, isStarBranch) {
+      if (event) event.stopPropagation();
+      if (!isAdmin) {
+        openAdminLoginModal();
+        return;
+      }
+      const hall = DATA[hallId];
+      const sub = hall?.submenus?.[subIdx];
+      const list = isStarBranch ? sub?.stars10 : sub?.items;
+      const item = list?.[itemIdx];
+      if (!item) return;
+
+      openConfirmModal(
+        'Үзмэр устгах',
+        `"${item.title}" үзмэрийг музейн сангаас бүрмөсөн хасах уу?`,
+        'Тийм, устгах',
+        () => {
+          list.splice(itemIdx, 1);
+          if (selectedMapPinIndex >= list.length) {
+            selectedMapPinIndex = Math.max(0, list.length - 1);
+          }
+          persistDatabase();
+          renderWorkspace();
+          notify(`🗑️ "${item.title}" үзмэрийг хаслаа.`);
+        }
+      );
+    }
+
+    function confirmResetDefaultData() {
+      if (!isAdmin) return;
+      openConfirmModal(
+        'Анхны өгөгдөл сэргээх',
+        'Таны нэмсэн болон засварласан бүх өөрчлөлтийг буцааж музейн анхны өгөгдлийг сэргээх үү?',
+        'Тийм, сэргээх',
+        () => {
+          DATA = JSON.parse(JSON.stringify(MUSEUM_DATA));
+          localStorage.removeItem('kdm_v4_full_database');
+          selectedMapPinIndex = 0;
+          selectedZodiacIndex = 0;
+          renderWorkspace();
+          notify('↺ Музейн анхны өгөгдлийг сэргээлээ.');
+        }
+      );
+    }
+
+    function enterChamber(hallId) {
+      const hall = DATA[hallId];
+      if (!hall) return;
+      if (hall.directToSubmenu) {
+        navigateTo({ level: 'room', hallId: hall.id, subIdx: 0 });
+      } else {
+        navigateTo({ level: 'chamber-menu', hallId: hall.id });
+      }
+    }
+
+    // =========================================================================
+    // 3C. CONTENT PROTECTION (ANTI-SCREENSHOT, SCREEN RECORD, SCREEN SHARE, COPY)
+    // =========================================================================
+    function triggerSecurityShield(reasonText) {
+      if (isAdmin) return;
+      const shield = document.getElementById('security-shield');
+      if (reasonText) {
+        document.getElementById('security-shield-reason').textContent = reasonText;
+      }
+      shield.classList.remove('hidden');
+      shield.classList.add('flex');
+    }
+
+    function dismissSecurityShield() {
+      const shield = document.getElementById('security-shield');
+      shield.classList.add('hidden');
+      shield.classList.remove('flex');
+    }
+
+    function renderVisitorWatermark() {
+      const box = document.getElementById('visitor-watermark');
+      if (!box) return;
+      const label = `${escapeHtml(visitor.name)} • Зөвхөн үзэх эрхтэй • Хуулах, түгээх хориотой`;
+      const cells = Array.from({ length: 36 }, () =>
+        `<div class="whitespace-nowrap text-xs sm:text-sm font-bold tracking-widest text-amber-200 -rotate-24 py-6">${label}</div>`
+      ).join('');
+      box.innerHTML = `<div class="grid grid-cols-2 sm:grid-cols-3 gap-8 w-[140%] -ml-[20%] -mt-10">${cells}</div>`;
+    }
+
+    function initContentProtection() {
+      // 1. Disable Right-Click Context Menu for Visitors
+      document.addEventListener('contextmenu', e => {
+        if (!isAdmin) {
+          e.preventDefault();
+          notify('⚠️ Админы зөвшөөрөлгүйгээр хуулах, хадгалах хориотой.');
+        }
+      });
+
+      // 2. Disable Dragging Images / Elements for Visitors
+      document.addEventListener('dragstart', e => {
+        if (!isAdmin) e.preventDefault();
+      });
+
+      // 3. Intercept Screenshot, Print, Save, DevTools Shortcuts
+      document.addEventListener('keydown', e => {
+        if (isAdmin) return;
+
+        const key = (e.key || '').toLowerCase();
+        const isScreenshotKey =
+          e.key === 'PrintScreen' ||
+          e.keyCode === 44 ||
+          (e.metaKey && e.shiftKey && ['3', '4', '5', 's'].includes(key)) ||
+          (e.ctrlKey && e.shiftKey && ['s', 'i', 'j', 'c'].includes(key)) ||
+          (e.metaKey && e.altKey && ['i', 'j', 'c'].includes(key)) ||
+          e.key === 'F12';
+
+        const isSaveOrPrint =
+          (e.ctrlKey || e.metaKey) && ['s', 'p', 'u', 'c'].includes(key) &&
+          !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName);
+
+        if (isScreenshotKey) {
+          e.preventDefault();
+          try { navigator.clipboard?.writeText(''); } catch (_) {}
+          triggerSecurityShield(
+            'Screenshot / Screen Record хийх оролдлого илэрлээ. Админы зөвшөөрөлгүйгээр дэлгэцийн зураг авах, бичлэг хийх болон цааш дамжуулахыг хатуу хориглоно!'
+          );
+        } else if (isSaveOrPrint) {
+          e.preventDefault();
+          notify('⚠️ Оюуны өмчийн хамгаалалт: Хуулах, хадгалах болон хэвлэх хориотой.');
+        }
+      });
+
+      // 4. Obscure Screen on Window Blur / Tab Switch / Screen-Capture Overlay
+      window.addEventListener('blur', () => {
+        if (isAdmin) return;
+        const workspaceVisible = !document.getElementById('museum-workspace').classList.contains('hidden');
+        if (workspaceVisible) {
+          triggerSecurityShield(
+            'Цонхноос шилжих эсвэл дэлгэц бичих/хуваалцах (Screen Record / Screen Share) үед агуулга автоматаар нууцлагдлаа.'
+          );
+        }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (isAdmin) return;
+        if (document.hidden && !document.getElementById('museum-workspace').classList.contains('hidden')) {
+          triggerSecurityShield(
+            'Уг сайтын агуулгыг админы зөвшөөрөлгүйгээр түгээх, бичих, хуваалцахыг хориглоно.'
+          );
+        }
+      });
+
+      // 5. Block Browser Screen-Share API (getDisplayMedia) for Visitors
+      if (navigator.mediaDevices && typeof navigator.mediaDevices.getDisplayMedia === 'function') {
+        const originalGetDisplayMedia = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
+        navigator.mediaDevices.getDisplayMedia = function (...args) {
+          if (!isAdmin) {
+            triggerSecurityShield('Зочны эрхээр Screen Share (дэлгэц хуваалцах) хийх хориотой. Зөвхөн Админ зөвшөөрөлтэй.');
+            return Promise.reject(new DOMException('Screen sharing is restricted to Admin only.', 'NotAllowedError'));
+          }
+          return originalGetDisplayMedia(...args);
+        };
+      }
+    }
+
+    function navigateTo(route) {
+      currentRoute = route;
+      selectedMapPinIndex = 0;
+
+      // Update ambient background & top nav highlights
+      if (route.level === 'atrium') {
+        document.body.className = 'bg-entrance antialiased selection:bg-amber-500/30 selection:text-amber-200';
+        updateNavHighlight('atrium');
+      } else {
+        const hall = DATA[route.hallId];
+        document.body.className = `${hall.bgClass} antialiased selection:bg-amber-500/30 selection:text-amber-200`;
+        updateNavHighlight(route.hallId);
+      }
+
+      renderBreadcrumb();
+      renderWorkspace();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateNavHighlight(activeKey) {
+      document.querySelectorAll('.nav-pill').forEach(btn => {
+        if (btn.dataset.nav === activeKey) {
+          btn.classList.add('bg-amber-400/20', 'text-amber-200', 'border', 'border-amber-400/40');
+        } else {
+          btn.classList.remove('bg-amber-400/20', 'text-amber-200', 'border', 'border-amber-400/40');
+        }
+      });
+    }
+
+    function renderBreadcrumb() {
+      const bar = document.getElementById('breadcrumb-bar');
+      const crumbs = [
+        { label: '🏛️ Гол танхим', action: `navigateTo({ level: 'atrium' })` }
+      ];
+
+      if (currentRoute.hallId) {
+        const hall = DATA[currentRoute.hallId];
+        const hallAction = hall.directToSubmenu
+          ? `navigateTo({ level: 'room', hallId: '${hall.id}', subIdx: 0 })`
+          : `navigateTo({ level: 'chamber-menu', hallId: '${hall.id}' })`;
+        crumbs.push({ label: `${hall.icon} ${hall.name}`, action: hallAction });
+
+        if ((currentRoute.level === 'room' || currentRoute.level === 'stars-branch') && !hall.directToSubmenu) {
+          const sub = hall.submenus[currentRoute.subIdx];
+          crumbs.push({
+            label: sub.label,
+            action: `navigateTo({ level: 'room', hallId: '${hall.id}', subIdx: ${currentRoute.subIdx} })`
+          });
+        }
+
+        if (currentRoute.level === 'stars-branch') {
+          crumbs.push({
+            label: currentRoute.branch === 'stars10' ? '1. Одод (10 алдарт од)' : '2. Өөрийн ордны од (12 орд)',
+            action: ''
+          });
+        }
+      }
+
+      bar.innerHTML = crumbs.map((c, idx) => {
+        const isLast = idx === crumbs.length - 1;
+        if (isLast) {
+          return `<span class="text-amber-300 font-semibold">${c.label}</span>`;
+        }
+        return `
+          <button onclick="${c.action}" class="hover:text-amber-200 transition-colors cursor-pointer">${c.label}</button>
+          <span class="text-zinc-600">›</span>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 4. ENTRANCE ("ҮҮДЭЭР ОРОХ" -> ОВОГ НЭР) & DOORS ANIMATION
+    // =========================================================================
+    function openEntranceNameModal() {
+      const m = document.getElementById('entrance-name-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      setTimeout(() => document.getElementById('input-visitor-name').focus(), 100);
+    }
+
+    function closeEntranceNameModal() {
+      const m = document.getElementById('entrance-name-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function submitVisitorEntry(e) {
+      e.preventDefault();
+      const nameVal = document.getElementById('input-visitor-name').value.trim();
+      if (!nameVal) return;
+
+      visitor = {
+        name: nameVal,
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      closeEntranceNameModal();
+      openDoorsAndEnter();
+      notify(`🚪 Тавтай морил, ${visitor.name}!`);
+    }
+
+    function openDoorsAndEnter() {
+      syncVisitorUI();
+      renderVisitorWatermark();
+      const overlay = document.getElementById('entrance-overlay');
+      const doors = document.getElementById('palace-doors');
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+      doors.classList.add('doors-opened');
+
+      setTimeout(() => {
+        document.getElementById('view-entrance').classList.add('hidden');
+        document.getElementById('museum-header').classList.remove('hidden');
+        document.getElementById('museum-workspace').classList.remove('hidden');
+        syncAdminUI();
+        navigateTo({ level: 'atrium' });
+      }, 1150);
+    }
+
+    function syncVisitorUI() {
+      document.getElementById('header-visitor-name').textContent = visitor.name;
+    }
+
+    // =========================================================================
+    // 5. DRILL-DOWN ROUTER & BREADCRUMB GENERATOR
+    // =========================================================================
+    function renderWorkspace() {
+      const stage = document.getElementById('workspace-stage');
+      // Re-trigger smooth fade animation
+      stage.classList.remove('stage-enter');
+      void stage.offsetWidth;
+      stage.classList.add('stage-enter');
+
+      // -----------------------------------------------------------------------
+      // LEVEL 0: ГОЛ ТАНХИМ — 5 ТАНХИМЫН СОНГОЛТ
+      // -----------------------------------------------------------------------
+      if (currentRoute.level === 'atrium') {
+        stage.innerHTML = `
+          <div class="text-center max-w-3xl mx-auto mb-10">
+            <span class="text-amber-400 text-xs font-semibold tracking-[0.22em] uppercase">Тавтай морил • Гол Танхим</span>
+            <h2 class="font-serif-display text-3xl sm:text-5xl font-bold text-white mt-2">
+              Сайн байна уу, <span class="text-amber-300">${escapeHtml(visitor.name)}</span>!
+            </h2>
+            <p class="text-zinc-400 text-sm sm:text-base mt-2.5">
+              Доорх 5 танхимаас сонгон дотогш орно уу. Танхим бүр дотроо тусдаа дэд өрөөнүүдтэй.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${Object.values(DATA).map(hall => {
+              const isAstro = hall.id === 'astronomy';
+              return `
+                <div onclick="enterChamber('${hall.id}')" class="portal-card group cursor-pointer relative rounded-3xl glass-box ${hall.borderClass} p-6 sm:p-7 flex flex-col justify-between shadow-2xl overflow-hidden">
+                  ${isAstro ? `<span class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-indigo-500 text-white text-[10px] font-bold uppercase tracking-wider">★ Онцгой сансрын танхим</span>` : ''}
+                  <div>
+                    <div class="flex items-center gap-3 mb-4">
+                      <div class="w-14 h-14 rounded-2xl bg-white/[0.06] border border-white/15 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+                        ${hall.icon}
+                      </div>
+                      <span class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-lg bg-white/5" style="color: ${hall.accent}">
+                        ${hall.number}-р танхим
+                      </span>
+                    </div>
+                    <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white">${hall.name}</h3>
+                    <p class="text-zinc-400 text-xs sm:text-sm mt-2 leading-relaxed">${hall.shortDesc}</p>
+                  </div>
+
+                  <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-xs text-zinc-400">${hall.directToSubmenu ? 'Үүсэл хөгжил + Топ 5' : hall.submenus.length + ' тусгай дэд цэс'}</span>
+                    <span class="px-4 py-1.5 rounded-xl bg-white/10 group-hover:bg-amber-400 group-hover:text-zinc-950 text-xs font-bold text-white transition-all">
+                      Танхим руу орох →
+                    </span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      // -----------------------------------------------------------------------
+      // LEVEL 1: ТАНХИМЫН ДОТООД ЦЭС (ЗӨВХӨН ДЭД ЦЭСҮҮДИЙН ПОРТАЛ КАРТУУД)
+      // -----------------------------------------------------------------------
+      if (currentRoute.level === 'chamber-menu') {
+        const hall = DATA[currentRoute.hallId];
+        stage.innerHTML = `
+          <div class="pb-6 mb-8 border-b border-white/10">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <button onclick="navigateTo({ level: 'atrium' })" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-amber-400 hover:text-zinc-950 border border-white/15 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer">
+                <span>←</span> Буцах (5 Танхим)
+              </button>
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style="color: ${hall.accent}; border-color: ${hall.accent}66; background: ${hall.accent}1A">
+                ${hall.icon} ${hall.number}-р танхим
+              </span>
+            </div>
+
+            <h2 class="font-serif-display text-3xl sm:text-5xl font-bold text-white">${hall.name}</h2>
+            <p class="text-zinc-300/85 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">${hall.description}</p>
+          </div>
+
+          <div class="mb-5">
+            <span class="text-xs font-bold uppercase tracking-widest" style="color: ${hall.accent}">
+              📂 Доторх цэсүүдийг сонгоно уу
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            ${hall.submenus.map((sub, idx) => `
+              <div onclick="navigateTo({ level: 'room', hallId: '${hall.id}', subIdx: ${idx} })" class="portal-card group cursor-pointer rounded-3xl glass-box ${hall.borderClass} p-7 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 text-8xl opacity-[0.06] group-hover:opacity-[0.12] transition-opacity select-none">
+                  ${sub.icon}
+                </div>
+                <div>
+                  <div class="w-16 h-16 rounded-2xl bg-white/[0.06] border border-white/15 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform">
+                    ${sub.icon}
+                  </div>
+                  <div class="text-xs font-bold uppercase tracking-wider mb-1" style="color: ${hall.accent}">
+                    Цэс ${sub.number}
+                  </div>
+                  <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white leading-snug">
+                    ${sub.label}
+                  </h3>
+                  <p class="text-zinc-400 text-xs sm:text-sm mt-3 leading-relaxed">
+                    ${sub.portalDesc}
+                  </p>
+                </div>
+
+                <div class="mt-7 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <span class="text-xs text-zinc-400">${sub.countText}</span>
+                  <span class="px-4 py-2 rounded-xl bg-white/10 group-hover:bg-amber-400 group-hover:text-zinc-950 text-xs font-bold text-white transition-all">
+                    Нээж үзэх →
+                  </span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      // -----------------------------------------------------------------------
+      // LEVEL 2: СОНГОСОН ДЭД ЦЭС / ӨРӨӨНИЙ АГУУЛГА
+      // -----------------------------------------------------------------------
+      if (currentRoute.level === 'room') {
+        const hall = DATA[currentRoute.hallId];
+        const sub = hall.submenus[currentRoute.subIdx];
+        const backAction = hall.directToSubmenu
+          ? `navigateTo({ level: 'atrium' })`
+          : `navigateTo({ level: 'chamber-menu', hallId: '${hall.id}' })`;
+        const backLabel = hall.directToSubmenu ? 'Буцах (5 Танхим)' : `Буцах (${hall.name})`;
+
+        // Header for Room
+        let roomHeader = `
+          <div class="pb-6 mb-8 border-b border-white/10">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <button onclick="${backAction}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-amber-400 hover:text-zinc-950 border border-white/15 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer">
+                <span>←</span> ${backLabel}
+              </button>
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style="color: ${hall.accent}; border-color: ${hall.accent}66; background: ${hall.accent}1A">
+                ${hall.icon} ${hall.name}
+              </span>
+            </div>
+
+            <h2 class="font-serif-display text-3xl sm:text-5xl font-bold text-white">
+              ${hall.directToSubmenu ? hall.name : sub.label}
+            </h2>
+            <p class="text-zinc-300/85 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">
+              ${sub.portalDesc}
+            </p>
+          </div>
+        `;
+
+        // CASE 1: ASTRONOMY -> "1. Оддын нууц" -> Intermediate 2-Choice Menu ("1. Одод" vs "2. Өөрийн ордны од")
+        if (sub.type === 'stars-secret-portal') {
+          stage.innerHTML = roomHeader + `
+            <div class="mb-5">
+              <span class="text-indigo-400 text-xs font-bold uppercase tracking-widest">✨ Оддын Нууцын Өрөө • 2 Сонголт</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-7">
+              <!-- Choice 1: 1. Одод (10 stars) -->
+              <div onclick="navigateTo({ level: 'stars-branch', hallId: 'astronomy', subIdx: 0, branch: 'stars10' })" class="portal-card group cursor-pointer rounded-3xl glass-box border-indigo-500/40 hover:border-indigo-400 p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 text-9xl opacity-[0.07] group-hover:opacity-[0.14] transition-opacity">🌌</div>
+                <div>
+                  <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform">
+                    🌌
+                  </div>
+                  <div class="text-xs font-bold text-indigo-300 uppercase tracking-wider">1-р хэсэг</div>
+                  <h3 class="font-serif-display text-3xl sm:text-4xl font-bold text-white mt-1">1. Одод</h3>
+                  <p class="text-zinc-300 text-sm mt-3 leading-relaxed">
+                    Долоон бурхан, Алтан гадас, Сириус, Бетельгейзе, Вега, Мичид зэрэг алдарт <strong>10 оддын</strong> нууц, тэдгээрийн учир тайлал ба дэлхийгээс хэр хол оршдог тухай.
+                  </p>
+                </div>
+                <div class="mt-8 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <span class="text-xs text-indigo-300 font-semibold">10 алдарт од</span>
+                  <span class="px-5 py-2.5 rounded-xl bg-indigo-500 group-hover:bg-amber-400 group-hover:text-zinc-950 text-xs font-bold text-white transition-all">
+                    Оддын өрөөнд орох →
+                  </span>
+                </div>
+              </div>
+
+              <!-- Choice 2: 2. Өөрийн ордны од (12 Zodiac) -->
+              <div onclick="navigateTo({ level: 'stars-branch', hallId: 'astronomy', subIdx: 0, branch: 'zodiac12' })" class="portal-card group cursor-pointer rounded-3xl glass-box border-purple-500/40 hover:border-purple-400 p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 text-9xl opacity-[0.07] group-hover:opacity-[0.14] transition-opacity">♈</div>
+                <div>
+                  <div class="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform">
+                    ♈
+                  </div>
+                  <div class="text-xs font-bold text-purple-300 uppercase tracking-wider">2-р хэсэг</div>
+                  <h3 class="font-serif-display text-3xl sm:text-4xl font-bold text-white mt-1">2. Өөрийн ордны од</h3>
+                  <p class="text-zinc-300 text-sm mt-3 leading-relaxed">
+                    Зурхайн <strong>12 орд</strong> тус бүрийн гол од, гэрлийн жилийн зай болон таны ордны од ямар учир утгатайг тайлбарласан тусгай хэсэг.
+                  </p>
+                </div>
+                <div class="mt-8 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <span class="text-xs text-purple-300 font-semibold">Зурхайн 12 орд</span>
+                  <span class="px-5 py-2.5 rounded-xl bg-purple-500 group-hover:bg-amber-400 group-hover:text-zinc-950 text-xs font-bold text-white transition-all">
+                    12 орд руу орох →
+                  </span>
+                </div>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        // CASE 2: NATURE HALL -> "1. Байгалийн үзэсгэлэнт 5 цогцолбор газар" (Interactive Map)
+        if (sub.type === 'map') {
+          const activePlace = sub.items[selectedMapPinIndex] || sub.items[0];
+          stage.innerHTML = roomHeader + `
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              <div class="lg:col-span-6 rounded-3xl glass-box border border-emerald-400/30 p-5 sm:p-6 shadow-2xl">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">🗺️ Солонгосын Байгалийн Газрын Зураг</span>
+                  <span class="text-[11px] text-zinc-400">Газрын зураг дээрх цэг дээр дарна уу</span>
+                </div>
+
+                <div class="relative w-full rounded-2xl bg-[#04130E] border border-emerald-500/25 overflow-hidden p-2">
+                  <svg viewBox="0 0 600 580" class="w-full h-auto select-none">
+                    <g stroke="#10B981" stroke-opacity="0.08" stroke-width="1">
+                      <line x1="0" y1="120" x2="600" y2="120"/><line x1="0" y1="240" x2="600" y2="240"/>
+                      <line x1="0" y1="360" x2="600" y2="360"/><line x1="0" y1="480" x2="600" y2="480"/>
+                      <line x1="150" y1="0" x2="150" y2="580"/><line x1="300" y1="0" x2="300" y2="580"/>
+                      <line x1="450" y1="0" x2="450" y2="580"/>
+                    </g>
+                    <path d="M 225 75 L 385 60 L 430 140 L 465 245 L 455 365 L 395 425 L 315 445 L 225 450 L 195 385 L 205 295 L 180 215 L 205 140 Z"
+                          fill="#0B3B2C" stroke="#34D399" stroke-width="3" stroke-linejoin="round" />
+                    <path d="M 370 110 L 390 85 L 410 115 M 385 165 L 405 140 L 425 170 M 330 330 L 350 305 L 370 335"
+                          fill="none" stroke="#6EE7B7" stroke-opacity="0.35" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="255" cy="512" rx="46" ry="22" fill="#0B3B2C" stroke="#34D399" stroke-width="2.5"/>
+                    <text x="115" y="290" fill="#34D399" fill-opacity="0.35" font-size="14" font-family="sans-serif">ШАР ТЭНГИС</text>
+                    <text x="480" y="250" fill="#34D399" fill-opacity="0.35" font-size="14" font-family="sans-serif">ЗҮҮН ТЭНГИС</text>
+
+                    ${sub.items.map((loc, i) => {
+                      const isSel = i === selectedMapPinIndex;
+                      return `
+                        <g onclick="selectMapLocation(${i})" class="cursor-pointer">
+                          <circle cx="${loc.mapX}" cy="${loc.mapY}" r="${isSel ? 22 : 14}" fill="${isSel ? '#FBBF24' : '#10B981'}" class="pin-ring"/>
+                          <circle cx="${loc.mapX}" cy="${loc.mapY}" r="11" fill="${isSel ? '#FBBF24' : '#10B981'}" stroke="#04130E" stroke-width="2.5"/>
+                          <text x="${loc.mapX}" y="${loc.mapY + 4}" font-size="11" font-weight="bold" text-anchor="middle" fill="#04130E">${i + 1}</text>
+                        </g>
+                      `;
+                    }).join('')}
+                  </svg>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
+                  ${sub.items.map((loc, i) => `
+                    <button onclick="selectMapLocation(${i})" class="text-left px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${i === selectedMapPinIndex ? 'bg-amber-400 text-zinc-950' : 'bg-white/5 text-zinc-300 hover:bg-white/10'}">
+                      ${loc.title}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="lg:col-span-6 rounded-3xl glass-box border border-emerald-400/35 overflow-hidden shadow-2xl">
+                ${activePlace ? `
+                <div class="relative aspect-[16/10] bg-black overflow-hidden cursor-pointer group" onclick="openItemDetailByRef('nature', ${currentRoute.subIdx}, ${selectedMapPinIndex})">
+                  <img src="${activePlace.images[0]}" alt="${activePlace.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ${isAdmin ? `
+                    <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5">
+                      <button onclick="openExhibitEditorModal({ hallId: 'nature', subIdx: ${currentRoute.subIdx}, itemIdx: ${selectedMapPinIndex}, isStarBranch: false }, event)" class="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-zinc-950 text-[11px] font-bold shadow cursor-pointer">
+                        ✏️ Засах
+                      </button>
+                      <button onclick="deleteExhibit(event, 'nature', ${currentRoute.subIdx}, ${selectedMapPinIndex}, false)" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold shadow cursor-pointer">
+                        🗑️ Хасах
+                      </button>
+                    </div>
+                  ` : ''}
+                  <div class="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-amber-400 text-zinc-950 text-xs font-bold shadow-lg">
+                    🔍 Томруулж үзэх (${activePlace.images.length} зураг)
+                  </div>
+                </div>
+
+                <div class="p-6">
+                  <div class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">${activePlace.subtitle}</div>
+                  <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white mt-1">${activePlace.title}</h3>
+
+                  <div class="grid grid-cols-2 gap-2.5 mt-4">
+                    ${(activePlace.meta || []).map(m => `
+                      <div class="p-2.5 rounded-xl bg-white/[0.04] border border-white/10">
+                        <div class="text-[10px] text-zinc-400 uppercase">${m.label}</div>
+                        <div class="text-xs font-semibold text-zinc-100 mt-0.5">${m.value}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+
+                  <p class="text-zinc-200 text-sm mt-4 leading-relaxed">${activePlace.description}</p>
+
+                  <div class="mt-4 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-400/30">
+                    <div class="text-xs font-bold text-emerald-300">${activePlace.extraTitle || '🍃 Орчны дүрслэл'}</div>
+                    <p class="text-xs text-zinc-200 mt-1 leading-relaxed">${activePlace.extraText || ''}</p>
+                  </div>
+                </div>
+                ` : `<div class="p-8 text-center text-zinc-400 text-sm">Одоогоор газар бүртгэгдээгүй байна.</div>`}
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        // CASE 3: TECHNOLOGY HALL (Timeline at top + Top 5 Robots & Inventions below)
+        if (sub.type === 'tech-layout') {
+          stage.innerHTML = roomHeader + `
+            <div class="rounded-3xl glass-box border border-cyan-400/30 p-6 sm:p-7 mb-9 shadow-xl">
+              <div class="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-1">
+                <span>⚡ I Хэсэг</span> • <span>Түүхэн замнал</span>
+              </div>
+              <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white">
+                Технологийн Үүсэл Хөгжил
+              </h3>
+              <p class="text-zinc-400 text-xs sm:text-sm mt-1">
+                Эртний металл хэвлэл, усан цагнаас эхлээд орчин үеийн хиймэл оюун, робот техник хүртэлх хөгжил:
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 mt-5">
+                ${sub.timeline.map(step => `
+                  <div class="p-4 rounded-2xl bg-cyan-950/35 border border-cyan-400/25 flex flex-col justify-between">
+                    <div>
+                      <span class="inline-block px-2.5 py-0.5 rounded-md bg-cyan-400 text-zinc-950 text-xs font-bold">${step.year}</span>
+                      <h4 class="font-bold text-white text-sm mt-2">${step.title}</h4>
+                      <p class="text-zinc-300 text-xs mt-1 leading-relaxed">${step.desc}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="text-cyan-400 text-xs font-bold uppercase tracking-widest">🤖 II Хэсэг • Шилдэг Бүтээлүүд</div>
+              <h3 class="font-serif-display text-2xl sm:text-3xl font-bold text-white mt-0.5">
+                Топ 5 Робот ба Технологийн Агуу Бүтээлүүд
+              </h3>
+              <p class="text-zinc-400 text-xs sm:text-sm mt-1">Дурын 1 бүтээл дээр дарахад хэн зохион бүтээсэн, ямар зориулалттай, хэрхэн ажилладаг нь гарч ирнэ.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              ${sub.items.map((item, idx) => renderCardHTML(item, hall, currentRoute.subIdx, idx)).join('')}
+            </div>
+          `;
+          return;
+        }
+
+        // CASE 4: SOLAR SYSTEM (Нарны аймаг)
+        if (sub.type === 'solar') {
+          stage.innerHTML = roomHeader + `
+            <div class="p-4 rounded-2xl glass-box border border-indigo-400/30 mb-6 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-indigo-300">☀️ Нарны Аймгийн 8 Гараг</div>
+                <p class="text-xs text-zinc-300 mt-0.5">Сонгосон гараг дээр дарахад нарнаас хэр хол зайтай, бүх үзүүлэлтүүд болон <strong>бүтэн ба ойртуулсан зураг</strong> гарч ирнэ.</p>
+              </div>
+              <span class="text-xs font-mono text-amber-300 bg-black/50 px-3 py-1.5 rounded-xl border border-white/10">1 AU = 149.6 сая км</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              ${sub.items.map((planet, idx) => renderCardHTML(planet, hall, currentRoute.subIdx, idx)).join('')}
+            </div>
+          `;
+          return;
+        }
+
+        // CASE 5: STANDARD 5-ITEM GRID (Artifacts, Plants, Kings, Queens, Weapons, Music, Drama, Poetry, Rockets)
+        stage.innerHTML = roomHeader + `
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${sub.items.map((item, idx) => renderCardHTML(item, hall, currentRoute.subIdx, idx)).join('')}
+          </div>
+        `;
+        return;
+      }
+
+      // -----------------------------------------------------------------------
+      // LEVEL 3: ОДОН ОРНЫ ТАНХИМ -> 1. ОДДЫН НУУЦ -> (1. ОДОД эсвэл 2. ОРДНЫ ОД)
+      // -----------------------------------------------------------------------
+      if (currentRoute.level === 'stars-branch') {
+        const sub = DATA.astronomy.submenus[0];
+        const isStars10 = currentRoute.branch === 'stars10';
+
+        let branchHeader = `
+          <div class="pb-6 mb-8 border-b border-white/10">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <button onclick="navigateTo({ level: 'room', hallId: 'astronomy', subIdx: 0 })" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-amber-400 hover:text-zinc-950 border border-white/15 text-xs sm:text-sm font-semibold text-white transition-all cursor-pointer">
+                <span>←</span> Буцах (Оддын нууц)
+              </button>
+              <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-indigo-400/40 bg-indigo-500/15 text-indigo-300">
+                🌌 Одон орны танхим • Оддын нууц
+              </span>
+            </div>
+
+            <h2 class="font-serif-display text-3xl sm:text-5xl font-bold text-white">
+              ${isStars10 ? '1. Одод (Долоон бурхан зэрэг 10 алдарт од)' : '2. Өөрийн ордны од (Зурхайн 12 орд)'}
+            </h2>
+            <p class="text-zinc-300/85 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed">
+              ${isStars10
+                ? 'Долоон бурхан од зэрэг тэнгэрийн хамгийн алдартай 10 од дээр дарж тэдгээрийн учир тайлал, дэлхийгээс хэр хол оршдогийг үзнэ үү.'
+                : 'Өөрийн ордыг сонгож тухайн ордны од болон түүний тайлбарыг уншина уу.'}
+            </p>
+          </div>
+        `;
+
+        if (isStars10) {
+          stage.innerHTML = branchHeader + `
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              ${sub.stars10.map((star, idx) => renderStarCardHTML(star, idx)).join('')}
+            </div>
+          `;
+        } else {
+          const activeZodiac = sub.zodiac12[selectedZodiacIndex] || sub.zodiac12[0];
+          stage.innerHTML = branchHeader + `
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5 mb-7">
+              ${sub.zodiac12.map((z, i) => `
+                <button onclick="selectZodiac(${i})" class="p-3.5 rounded-2xl text-center transition-all cursor-pointer ${i === selectedZodiacIndex ? 'bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-500/30 scale-[1.03]' : 'glass-box text-zinc-300 hover:bg-white/10 border border-white/10'}">
+                  <div class="text-sm sm:text-base">${z.sign}</div>
+                  <div class="text-[10px] opacity-80 mt-0.5">${z.dates}</div>
+                </button>
+              `).join('')}
+            </div>
+
+            <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-indigo-950/85 via-slate-950 to-purple-950/70 border border-indigo-400/40 flex flex-col md:flex-row items-center gap-6 shadow-2xl">
+              <div class="w-24 h-24 shrink-0 rounded-full bg-indigo-500/20 border-2 border-indigo-400/60 flex items-center justify-center text-4xl shadow-[0_0_35px_rgba(129,140,248,0.35)] animate-float">
+                ✨
+              </div>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2 text-xs text-indigo-300 font-semibold">
+                  <span>Огноо: ${activeZodiac.dates}</span>
+                  <span>•</span>
+                  <span>Дэлхийгээс зай: ${activeZodiac.dist}</span>
+                </div>
+                <h4 class="font-serif-display text-2xl sm:text-4xl font-bold text-white mt-1.5">
+                  ${activeZodiac.sign} — Ордны од: <span class="text-amber-300">${activeZodiac.mainStar}</span>
+                </h4>
+                <p class="text-zinc-200 text-sm sm:text-base mt-3 leading-relaxed">
+                  ${activeZodiac.desc}
+                </p>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function renderCardHTML(item, hall, subIdx, itemIdx) {
+      const firstMeta = item.meta && item.meta[0] ? `${item.meta[0].label}: ${item.meta[0].value}` : '';
+      let poisonBadge = '';
+      if (item.poisonStatus === 'toxic') {
+        poisonBadge = `<div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-rose-600 text-white text-[10px] font-bold shadow">⚠️ ХОРТОЙ</div>`;
+      } else if (item.poisonStatus === 'safe') {
+        poisonBadge = `<div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-emerald-600 text-white text-[10px] font-bold shadow">✅ Хоргүй</div>`;
+      }
+
+      return `
+        <article onclick="openItemDetailByRef('${hall.id}', ${subIdx}, ${itemIdx})" class="portal-card group cursor-pointer rounded-2xl glass-box ${hall.borderClass} overflow-hidden flex flex-col justify-between shadow-xl">
+          <div class="relative aspect-[16/11] bg-black overflow-hidden">
+            <img src="${item.images[0]}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            ${poisonBadge}
+            ${isAdmin ? `
+              <div class="absolute bottom-2.5 left-2.5 z-20 flex items-center gap-1.5">
+                <button onclick="openExhibitEditorModal({ hallId: '${hall.id}', subIdx: ${subIdx}, itemIdx: ${itemIdx}, isStarBranch: false }, event)" class="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-zinc-950 text-[11px] font-bold shadow cursor-pointer">
+                  ✏️ Засах
+                </button>
+                <button onclick="deleteExhibit(event, '${hall.id}', ${subIdx}, ${itemIdx}, false)" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold shadow cursor-pointer">
+                  🗑️ Хасах
+                </button>
+              </div>
+            ` : ''}
+            <div class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-[10px] text-amber-300 border border-amber-400/30">
+              🖼️ ${item.images.length} зураг
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-65"></div>
+            <div class="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-amber-400 text-zinc-950 text-[11px] font-bold opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+              Дэлгэрэнгүй →
+            </div>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="text-[11px] font-semibold" style="color: ${hall.accent}">${item.subtitle}</div>
+              <h3 class="font-serif-display text-xl font-bold text-white mt-1 group-hover:text-amber-200 transition-colors">
+                ${item.title}
+              </h3>
+              <p class="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">
+                ${item.description}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-zinc-300">
+              <span class="truncate max-w-[205px]">${firstMeta}</span>
+              <span class="text-amber-300 font-semibold shrink-0">Нээх →</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderStarCardHTML(star, starIdx) {
+      return `
+        <article onclick="openStarDetail(${starIdx})" class="portal-card group cursor-pointer rounded-2xl glass-box border border-indigo-500/35 hover:border-indigo-400 overflow-hidden flex flex-col justify-between shadow-xl">
+          <div class="relative aspect-[16/11] bg-black overflow-hidden">
+            <img src="${star.images[0]}" alt="${star.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            ${isAdmin ? `
+              <div class="absolute bottom-2.5 left-2.5 z-20 flex items-center gap-1.5">
+                <button onclick="openExhibitEditorModal({ hallId: 'astronomy', subIdx: 0, itemIdx: ${starIdx}, isStarBranch: true }, event)" class="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-zinc-950 text-[11px] font-bold shadow cursor-pointer">
+                  ✏️ Засах
+                </button>
+                <button onclick="deleteExhibit(event, 'astronomy', 0, ${starIdx}, true)" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold shadow cursor-pointer">
+                  🗑️ Хасах
+                </button>
+              </div>
+            ` : ''}
+            <div class="absolute bottom-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-indigo-500 text-white text-[11px] font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+              Учир тайлал →
+            </div>
+          </div>
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="text-[11px] font-semibold text-indigo-300">${star.subtitle}</div>
+              <h4 class="font-serif-display text-lg font-bold text-white mt-0.5">${star.title}</h4>
+              <p class="text-zinc-400 text-xs mt-1.5 line-clamp-2">${star.description}</p>
+            </div>
+            <div class="mt-3 pt-2 border-t border-white/10 text-[11px] text-indigo-300 font-semibold flex justify-between">
+              <span>✨ Одны тайлбар</span>
+              <span>Үзэх →</span>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function selectMapLocation(idx) {
+      selectedMapPinIndex = idx;
+      renderWorkspace();
+    }
+
+    function selectZodiac(idx) {
+      selectedZodiacIndex = idx;
+      renderWorkspace();
+    }
+
+    // =========================================================================
+    // 7. EXHIBIT ZOOM & DETAIL MODAL + WEB AUDIO TRADITIONAL MELODY
+    // =========================================================================
+    let activeAudioFreq = null;
+    let activeAudioWave = 'triangle';
+
+    function openItemDetailByRef(hallId, subIdx, itemIdx) {
+      const hall = DATA[hallId];
+      const sub = hall.submenus[subIdx];
+      const item = sub.items[itemIdx];
+      if (!item) return;
+      showDetailModal(item, hall.name, sub.label);
+    }
+
+    function openStarDetail(starIdx) {
+      const sub = DATA.astronomy.submenus[0];
+      const star = sub.stars10[starIdx];
+      if (!star) return;
+      showDetailModal(star, DATA.astronomy.name, '1. Оддын нууц › 1. Одод');
+    }
+
+    function showDetailModal(item, hallName, subName) {
+      document.getElementById('detail-hall-tag').textContent = hallName;
+      document.getElementById('detail-sub-tag').textContent = subName;
+      document.getElementById('detail-title').textContent = item.title;
+      document.getElementById('detail-subtitle').textContent = item.subtitle || '';
+      document.getElementById('detail-desc').textContent = item.description || '';
+      document.getElementById('detail-extra-title').textContent = item.extraTitle || '💡 Нэмэлт тайлбар';
+      document.getElementById('detail-extra-text').textContent = item.extraText || '';
+
+      const metaGrid = document.getElementById('detail-meta-grid');
+      metaGrid.innerHTML = (item.meta || []).map(m => `
+        <div class="p-3 rounded-xl bg-white/[0.04] border border-white/10">
+          <div class="text-[10px] text-zinc-400 uppercase tracking-wider">${m.label}</div>
+          <div class="text-xs font-semibold text-zinc-100 mt-0.5">${m.value}</div>
+        </div>
+      `).join('');
+
+      const audioBox = document.getElementById('detail-audio-box');
+      if (item.freq) {
+        activeAudioFreq = item.freq;
+        activeAudioWave = item.wave || 'triangle';
+        audioBox.classList.remove('hidden');
+      } else {
+        activeAudioFreq = null;
+        audioBox.classList.add('hidden');
+      }
+
+      const thumbs = document.getElementById('detail-thumbs');
+      thumbs.innerHTML = item.images.map((src, idx) => `
+        <button onclick="switchDetailImage('${src}', this)" class="thumb-btn w-12 h-10 rounded-lg overflow-hidden border-2 ${idx === 0 ? 'border-amber-400' : 'border-white/15 opacity-70'} hover:opacity-100 transition-all cursor-pointer">
+          <img src="${src}" draggable="false" class="w-full h-full object-cover" />
+        </button>
+      `).join('');
+
+      const mainImg = document.getElementById('detail-main-img');
+      mainImg.src = item.images[0];
+      resetZoom();
+
+      const modal = document.getElementById('detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function switchDetailImage(src, btn) {
+      document.getElementById('detail-main-img').src = src;
+      resetZoom();
+      document.querySelectorAll('.thumb-btn').forEach(b => {
+        b.classList.remove('border-amber-400');
+        b.classList.add('border-white/15', 'opacity-70');
+      });
+      btn.classList.add('border-amber-400');
+      btn.classList.remove('border-white/15', 'opacity-70');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function adjustZoom(delta) {
+      zoomLevel = Math.min(3.2, Math.max(1, +(zoomLevel + delta).toFixed(2)));
+      if (zoomLevel === 1) { imgPanX = 0; imgPanY = 0; }
+      applyZoomTransform();
+    }
+
+    function resetZoom() {
+      zoomLevel = 1;
+      imgPanX = 0;
+      imgPanY = 0;
+      applyZoomTransform();
+    }
+
+    function applyZoomTransform() {
+      const img = document.getElementById('detail-main-img');
+      img.style.transform = `scale(${zoomLevel}) translate(${imgPanX}px, ${imgPanY}px)`;
+      document.getElementById('zoom-percent-badge').textContent = Math.round(zoomLevel * 100) + '%';
+    }
+
+    (function bindZoomPanEvents() {
+      const vp = document.getElementById('zoom-viewport');
+      if (!vp) return;
+      vp.addEventListener('mousedown', e => {
+        if (zoomLevel <= 1) return;
+        dragging = true;
+        dragStartX = e.clientX - imgPanX;
+        dragStartY = e.clientY - imgPanY;
+      });
+      window.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        imgPanX = e.clientX - dragStartX;
+        imgPanY = e.clientY - dragStartY;
+        applyZoomTransform();
+      });
+      window.addEventListener('mouseup', () => { dragging = false; });
+      vp.addEventListener('wheel', e => {
+        e.preventDefault();
+        adjustZoom(e.deltaY < 0 ? 0.25 : -0.25);
+      }, { passive: false });
+    })();
+
+    function playInstrumentDemo() {
+      if (!activeAudioFreq) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const notes = [activeAudioFreq, activeAudioFreq * 1.125, activeAudioFreq * 1.333, activeAudioFreq * 1.5, activeAudioFreq * 1.125];
+        notes.forEach((f, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = activeAudioWave;
+          osc.frequency.setValueAtTime(f, ctx.currentTime + idx * 0.28);
+          gain.gain.setValueAtTime(0.001, ctx.currentTime + idx * 0.28);
+          gain.gain.exponentialRampToValueAtTime(0.16, ctx.currentTime + idx * 0.28 + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.28 + 0.32);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.28);
+          osc.stop(ctx.currentTime + idx * 0.28 + 0.34);
+        });
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // 8. ADMIN EXHIBIT CREATOR & EDITOR (1-3 ЗУРАГ ОРУУЛАХ / ЗАСАХ)
+    // =========================================================================
+    function openExhibitEditorModal(target = null, event = null) {
+      if (event) event.stopPropagation();
+      if (!isAdmin) {
+        openAdminLoginModal();
+        return;
+      }
+
+      editingTarget = target;
+      const heading = document.getElementById('up-modal-heading');
+      const subtext = document.getElementById('up-modal-subtext');
+      const locSelectors = document.getElementById('up-location-selectors');
+      const submitBtn = document.getElementById('up-submit-btn');
+
+      if (target) {
+        // EDITING EXISTING EXHIBIT
+        const hall = DATA[target.hallId];
+        const sub = hall.submenus[target.subIdx];
+        const item = (target.isStarBranch ? sub.stars10 : sub.items)[target.itemIdx];
+        if (!item) return;
+
+        heading.textContent = '✏️ Үзмэрийн мэдээлэл засах';
+        subtext.textContent = 'Нэр, тайлбар, үзүүлэлтүүд болон зургуудыг шинэчлэн хадгална уу.';
+        locSelectors.classList.add('hidden');
+        submitBtn.textContent = '✓ Өөрчлөлтийг хадгалах';
+
+        document.getElementById('up-title').value = item.title || '';
+        document.getElementById('up-tag').value = item.subtitle || '';
+        document.getElementById('up-desc').value = item.description || '';
+        document.getElementById('up-extra').value = item.extraText || '';
+
+        const m0 = (item.meta && item.meta[0]) || { label: 'Үзүүлэлт 1', value: '' };
+        const m1 = (item.meta && item.meta[1]) || { label: 'Үзүүлэлт 2', value: '' };
+        document.getElementById('up-m0-label').textContent = m0.label;
+        document.getElementById('up-m0-val').value = m0.value;
+        document.getElementById('up-m1-label').textContent = m1.label;
+        document.getElementById('up-m1-val').value = m1.value;
+
+        uploadedImagesBuffer = [...(item.images || [])];
+        renderUploadPreviews();
+      } else {
+        // ADDING NEW EXHIBIT
+        heading.textContent = 'Шинэ үзмэр ба 1–3 зураг оруулах';
+        subtext.textContent = 'Өөрийн төхөөрөмжөөс 1-ээс 3 хүртэлх зураг сонгон дурын танхимын дэд хэсэгт шинэ үзмэр болгон нэмээрэй.';
+        locSelectors.classList.remove('hidden');
+        submitBtn.textContent = '✓ Музейн танхимд хадгалах';
+
+        document.getElementById('up-title').value = '';
+        document.getElementById('up-tag').value = '';
+        document.getElementById('up-desc').value = '';
+        document.getElementById('up-extra').value = '';
+        document.getElementById('up-m0-label').textContent = 'Үзүүлэлт 1 (Байршил / Гарал)';
+        document.getElementById('up-m0-val').value = '';
+        document.getElementById('up-m1-label').textContent = 'Үзүүлэлт 2 (Онцлог / Статус)';
+        document.getElementById('up-m1-val').value = '';
+
+        uploadedImagesBuffer = [];
+        renderUploadPreviews();
+
+        document.getElementById('up-hall').value = currentRoute.hallId || 'nature';
+        updateUploadSubmenus();
+        if (typeof currentRoute.subIdx === 'number') {
+          document.getElementById('up-submenu').value = currentRoute.subIdx;
+        }
+      }
+
+      const m = document.getElementById('upload-modal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeUploadModal() {
+      const m = document.getElementById('upload-modal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+      editingTarget = null;
+    }
+
+    function updateUploadSubmenus() {
+      const hallId = document.getElementById('up-hall').value;
+      const hall = DATA[hallId];
+      const sel = document.getElementById('up-submenu');
+      sel.innerHTML = hall.submenus.map((s, i) => `<option value="${i}">${s.label}</option>`).join('');
+    }
+
+    function renderUploadPreviews() {
+      const box = document.getElementById('up-preview-box');
+      box.innerHTML = uploadedImagesBuffer.map((src, i) => `
+        <div class="relative aspect-[4/3] rounded-xl overflow-hidden border border-emerald-400/50 bg-black group">
+          <img src="${src}" class="w-full h-full object-cover" />
+          <span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/75 text-[10px] text-emerald-300">Зураг ${i + 1}</span>
+          <button type="button" onclick="removeBufferedImage(${i})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center shadow cursor-pointer" title="Зураг хасах">
+            ✕
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function removeBufferedImage(idx) {
+      uploadedImagesBuffer.splice(idx, 1);
+      renderUploadPreviews();
+    }
+
+    function handleFilePreview(e) {
+      const remainingSlots = 3 - uploadedImagesBuffer.length;
+      if (remainingSlots <= 0) {
+        notify('⚠️ Дээд тал нь 3 зураг оруулах боломжтой. Эхлээд аль нэг зургийг хасна уу.');
+        return;
+      }
+      const files = Array.from(e.target.files).slice(0, remainingSlots);
+      if (!files.length) return;
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 860;
+            const ratio = Math.min(1, maxW / img.width);
+            canvas.width = img.width * ratio;
+            canvas.height = img.height * ratio;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressed = canvas.toDataURL('image/jpeg', 0.82);
+            if (uploadedImagesBuffer.length < 3) {
+              uploadedImagesBuffer.push(compressed);
+              renderUploadPreviews();
+            }
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+      e.target.value = '';
+    }
+
+    function submitExhibitForm(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+      if (!uploadedImagesBuffer.length) {
+        notify('⚠️ Хамгийн багадаа 1 зураг сонгож оруулна уу!');
+        return;
+      }
+
+      const title = document.getElementById('up-title').value.trim();
+      const tag = document.getElementById('up-tag').value.trim();
+      const desc = document.getElementById('up-desc').value.trim();
+      const extra = document.getElementById('up-extra').value.trim() || 'Музейн админы бүртгэсэн мэдээлэл.';
+      const m0Val = document.getElementById('up-m0-val').value.trim();
+      const m1Val = document.getElementById('up-m1-val').value.trim();
+
+      if (editingTarget) {
+        // UPDATE EXISTING EXHIBIT
+        const hall = DATA[editingTarget.hallId];
+        const sub = hall.submenus[editingTarget.subIdx];
+        const item = (editingTarget.isStarBranch ? sub.stars10 : sub.items)[editingTarget.itemIdx];
+        if (item) {
+          item.title = title;
+          item.subtitle = tag;
+          item.description = desc;
+          item.extraText = extra;
+          item.images = [...uploadedImagesBuffer];
+          if (item.meta && item.meta[0] && m0Val) item.meta[0].value = m0Val;
+          if (item.meta && item.meta[1] && m1Val) item.meta[1].value = m1Val;
+        }
+        persistDatabase();
+        closeUploadModal();
+        renderWorkspace();
+        notify(`✅ "${title}" үзмэрийн мэдээлэл шинэчлэгдлээ!`);
+      } else {
+        // CREATE NEW EXHIBIT
+        const hallId = document.getElementById('up-hall').value;
+        const subIndex = parseInt(document.getElementById('up-submenu').value, 10) || 0;
+
+        const newItem = {
+          id: 'admin-' + Date.now(),
+          mapX: 310,
+          mapY: 260,
+          title,
+          subtitle: tag,
+          meta: [
+            { label: 'Байршил / Гарал', value: m0Val || 'Солонгос' },
+            { label: 'Онцлог / Статус', value: m1Val || 'Музейн үнэт өв' },
+            { label: 'Зургийн тоо', value: `${uploadedImagesBuffer.length} зураг` },
+            { label: 'Огноо', value: new Date().toISOString().split('T')[0] }
+          ],
+          description: desc,
+          extraTitle: '💡 Нэмэлт мэдээлэл',
+          extraText: extra,
+          images: [...uploadedImagesBuffer]
+        };
+
+        const hall = DATA[hallId];
+        const targetSub = hall.submenus[subIndex];
+        if (targetSub.items) targetSub.items.unshift(newItem);
+        else if (targetSub.stars10) targetSub.stars10.unshift(newItem);
+
+        persistDatabase();
+        closeUploadModal();
+
+        if (hallId === 'astronomy' && subIndex === 0) {
+          navigateTo({ level: 'stars-branch', hallId: 'astronomy', subIdx: 0, branch: 'stars10' });
+        } else {
+          navigateTo({ level: 'room', hallId, subIdx: subIndex });
+        }
+        notify(`✅ "${title}" үзмэр (${uploadedImagesBuffer.length} зурагтай) амжилттай нэмэгдлээ!`);
+      }
+    }
+
+    // =========================================================================
+    // 9. TWINKLING COSMOS & AMBIENT PARTICLES CANVAS
+    // =========================================================================
+    function initCosmosBackground() {
+      const canvas = document.getElementById('cosmos-canvas');
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const particles = Array.from({ length: 68 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.8 + 0.4,
+        vy: Math.random() * 0.25 + 0.05,
+        t: Math.random() * Math.PI * 2
+      }));
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        const isSpace = currentRoute.hallId === 'astronomy';
+
+        for (const p of particles) {
+          p.y -= p.vy;
+          p.t += 0.035;
+          if (p.y < -5) p.y = h + 5;
+
+          const alpha = isSpace
+            ? 0.35 + Math.sin(p.t) * 0.48
+            : 0.1 + Math.sin(p.t) * 0.08;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, isSpace ? p.r * 1.35 : p.r, 0, Math.PI * 2);
+          ctx.fillStyle = isSpace
+            ? `rgba(199, 210, 254, ${Math.max(0.08, alpha)})`
+            : `rgba(253, 230, 138, ${Math.max(0.04, alpha)})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    function notify(text) {
+      const el = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = text;
+      el.classList.remove('opacity-0', 'translate-y-3');
+      el.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        el.classList.add('opacity-0', 'translate-y-3');
+        el.classList.remove('opacity-100', 'translate-y-0');
+      }, 3200);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeDetailModal();
+        closeEntranceNameModal();
+        closeUploadModal();
+        closeAdminLoginModal();
+        closeConfirmModal();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPersistedData();
+      initContentProtection();
+      initCosmosBackground();
+    });
+  </script>
+</body>
+</html>
